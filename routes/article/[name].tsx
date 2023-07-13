@@ -6,8 +6,8 @@ import * as runtime from 'preact/jsx-runtime'
 
 
 interface Page {
-    attrs: Record<string, unknown>,
-    body: string
+    titel: Record<string, unknown>,
+    rawMarkdown: string
 }
 
 
@@ -15,9 +15,6 @@ interface Page {
 export const handler: Handlers = {
     async GET(_req, ctx){
         const {name} = ctx.params;
-
-
-
         try{
             const rawMarkdown = await Deno.readTextFile(`./md/${name}.mdx`);
             return ctx.render({rawMarkdown: rawMarkdown})
@@ -31,26 +28,19 @@ export const handler: Handlers = {
 
 export default function MarkdownPage({data} : PageProps<{rawMarkdown: string}>){
 
-
-
-    const res = evaluateSync(data.rawMarkdown, {...runtime})
+    const evaluatedMarkdown = evaluateSync(data.rawMarkdown, {...runtime})
     
     return(
         <>
 
             <Head>
-                <title>Why Blog?</title>
+                <title>{}</title>
             </Head>
 
             <main>
                 <div class={"flex justify-center"}>
                     <div class={"prose p-2"}>
-                        {/* <div>
-                            <div dangerouslySetInnerHTML={{ __html: "<h1>Hello</h1>" }}/>
-                            
-                        </div> */}
-                        <div class={" bg-slate-100"}>Test</div>
-                        {res.default({})}
+                        {evaluatedMarkdown.default({})}
                     </div>
                 </div>
 
