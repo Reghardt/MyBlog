@@ -66,15 +66,14 @@ export default function Home(props : PageProps<{articles: IArticle[]}>) {
         <title>Fresh App</title>
       </Head>
 
-      <div class={"w-full grid justify-center"}>
-        <div class={"  p-4 prose "}>
+      <div class={"w-full grid justify-center "}>
+        <div class={"p-4 prose"}>
           <div class={" grid grid-cols-1 gap-6"}>
             {props.data.articles.reverse().map((article) => {
                 return(
                   <a class={" no-underline"} href={`/article/${article.mdxName}`}>
                     <div class={" bg-gray-100 hover:bg-gray-200 p-2 rounded"}>
                       <h2 class={"my-6"}>
-
                         <div>{article.title}</div>
                       </h2>
                     </div>

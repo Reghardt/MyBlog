@@ -6,8 +6,9 @@ export default function App({ Component }: AppProps) {
     <html>
         <Head>
           {/* <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script> */}
-          <link href={ asset("/output.css") } rel="stylesheet" />
-          <link rel="stylesheet" href="https://esm.sh/v128/@tailwindcss/typography@0.5.0/dist/typography.min.css"/>
+          {/* <link rel="stylesheet" href="https://esm.sh/v128/@tailwindcss/typography@0.1.3/dist/typography.min.css"/>  */}
+          <link href={ asset("/css/output.css") } rel="stylesheet" />
+          
         </Head>
         <body>
 
