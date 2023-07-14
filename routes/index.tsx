@@ -1,7 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import { useSignal } from "@preact/signals";
 import { Handlers, PageProps } from "$fresh/server.ts";
-
+import IconEye from "https://deno.land/x/tabler_icons_tsx@0.0.3/tsx/eye.tsx"
 interface IArticle {
   title: string, date: Date, mdxName: string, peekContent: string
 }
@@ -40,7 +40,7 @@ export const handler: Handlers = {
         peekContent: "test content"
       },
       {
-        title: "Tutorial: Tailwind in Fresh", date: new Date(" 13 07 2023"),
+        title: "Tutorial: Tailwind in Fresh with IntelliSense", date: new Date(" 13 07 2023"),
         mdxName: "6_tut_tailwind_fresh",
         peekContent: "test content"
       },
@@ -59,42 +59,51 @@ export default function Home(props : PageProps<{articles: IArticle[]}>) {
 
   //why can useSignal be used here, which is a hook, but useEffect can not?
 
-  
   return (
     <>
       <Head>
         <title>Fresh App</title>
+        
       </Head>
+      <body>
 
-      <div class={"w-full grid justify-center "}>
-        <div class={"p-4 prose"}>
-          <div class={" grid grid-cols-1 gap-6"}>
-            {props.data.articles.reverse().map((article) => {
-                return(
-                  <a class={" no-underline"} href={`/article/${article.mdxName}`}>
-                    <div class={" bg-gray-100 hover:bg-gray-200 p-2 rounded"}>
-                      <h2 class={"my-6"}>
-                        <div>{article.title}</div>
-                      </h2>
-                    </div>
-                  </a>
-                )
-              })
-            }
+
+        <div class={"w-full grid justify-center "}>
+          <div class={"p-4 prose"}>
+            <div class={" grid grid-cols-1 gap-6"}>
+              {props.data.articles.reverse().map((article) => {
+                  return(
+                    <a class={"no-underline"} href={`/article/${article.mdxName}`}>
+                      <div class={" bg-gray-100 hover:bg-gray-200 p-2 rounded"}>
+                        <h2 class={"my-6"}>
+                          <div>{article.title}</div>
+                        </h2>
+                        <div class={"flex justify-end items-center gap-2"}>
+                          <div>10</div>
+                          <IconEye/>
+                        </div>
+                      </div>
+                    </a>
+                  )
+                })
+              }
+            </div>
+          </div>
+
+          <div class={" flex justify-center mb-10 mt-6"}>
+            <a href="https://fresh.deno.dev">
+              <img
+                width="197"
+                height="37"
+                src="https://fresh.deno.dev/fresh-badge.svg"
+                alt="Made with Fresh"
+              />
+            </a>
           </div>
         </div>
+      </body>
 
-        <div class={" flex justify-center mb-10 mt-6"}>
-          <a href="https://fresh.deno.dev">
-            <img
-              width="197"
-              height="37"
-              src="https://fresh.deno.dev/fresh-badge.svg"
-              alt="Made with Fresh"
-            />
-          </a>
-        </div>
-      </div>
+      
 
     </>
   );
