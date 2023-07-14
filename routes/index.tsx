@@ -59,47 +59,51 @@ export default function Home(props : PageProps<{articles: IArticle[]}>) {
 
   //why can useSignal be used here, which is a hook, but useEffect can not?
 
-  
   return (
     <>
       <Head>
         <title>Fresh App</title>
+        
       </Head>
+      <body>
 
-      <div class={"w-full grid justify-center "}>
-        <div class={"p-4 prose"}>
-          <div class={" grid grid-cols-1 gap-6"}>
-            {props.data.articles.reverse().map((article) => {
-                return(
-                  <a class={"no-underline"} href={`/article/${article.mdxName}`}>
-                    <div class={" bg-gray-100 hover:bg-gray-200 p-2 rounded"}>
-                      <h2 class={"my-6"}>
-                        <div>{article.title}</div>
-                      </h2>
-                      <div class={"flex justify-end items-center gap-2"}>
-                        <div>10</div>
-                        <IconEye/>
+
+        <div class={"w-full grid justify-center "}>
+          <div class={"p-4 prose"}>
+            <div class={" grid grid-cols-1 gap-6"}>
+              {props.data.articles.reverse().map((article) => {
+                  return(
+                    <a class={"no-underline"} href={`/article/${article.mdxName}`}>
+                      <div class={" bg-gray-100 hover:bg-gray-200 p-2 rounded"}>
+                        <h2 class={"my-6"}>
+                          <div>{article.title}</div>
+                        </h2>
+                        <div class={"flex justify-end items-center gap-2"}>
+                          <div>10</div>
+                          <IconEye/>
+                        </div>
                       </div>
-                      
-                    </div>
-                  </a>
-                )
-              })
-            }
+                    </a>
+                  )
+                })
+              }
+            </div>
+          </div>
+
+          <div class={" flex justify-center mb-10 mt-6"}>
+            <a href="https://fresh.deno.dev">
+              <img
+                width="197"
+                height="37"
+                src="https://fresh.deno.dev/fresh-badge.svg"
+                alt="Made with Fresh"
+              />
+            </a>
           </div>
         </div>
+      </body>
 
-        <div class={" flex justify-center mb-10 mt-6"}>
-          <a href="https://fresh.deno.dev">
-            <img
-              width="197"
-              height="37"
-              src="https://fresh.deno.dev/fresh-badge.svg"
-              alt="Made with Fresh"
-            />
-          </a>
-        </div>
-      </div>
+      
 
     </>
   );
