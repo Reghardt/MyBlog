@@ -32,14 +32,13 @@ export default function MarkdownPage({data} : PageProps<{rawMarkdown: string}>){
     
     return(
         <>
-
             <Head>
                 <title>{}</title>
             </Head>
 
             <main>
                 <div class={"flex justify-center"}>
-                    <div class={"prose p-2"}>
+                    <div class={"prose w-full p-2"}>
                         {evaluatedMarkdown.default({})}
                     </div>
                 </div>

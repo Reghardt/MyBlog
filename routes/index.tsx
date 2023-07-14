@@ -68,7 +68,7 @@ export default function Home(props : PageProps<{articles: IArticle[]}>) {
 
 
         <div class={"w-full grid justify-center "}>
-          <div class={"p-4 prose"}>
+          <div class={"p-4 prose w-full"}>
             <div class={" grid grid-cols-1 gap-6"}>
               {props.data.articles.reverse().map((article) => {
                   return(
