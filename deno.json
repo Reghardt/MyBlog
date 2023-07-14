@@ -1,10 +1,8 @@
 {
   "lock": false,
   "tasks": {
-    "start": "deno run --allow-read --allow-env npm:tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch & deno run -A --watch=static/,routes/,md/,static/css dev.ts",
-    "tw": "cd tailwind; npx tailwindcss -i ../static/css/input.css -o ../static/css/output.css --watch",
+    "start": "cd tailwind; npx tailwindcss -i ../static/css/input.css -o ../static/css/output.css --watch & cd ..; deno run -A --watch=static/,routes/,md/ dev.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update ."
-    
   },
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.2.0/",

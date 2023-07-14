@@ -4,6 +4,5 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require('npm:@tailwindcss/typography'),],
+  plugins: [require('@tailwindcss/typography'),],
 }
-

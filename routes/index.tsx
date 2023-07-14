@@ -63,7 +63,6 @@ export default function Home(props : PageProps<{articles: IArticle[]}>) {
     <>
       <Head>
         <title>Fresh App</title>
-        
       </Head>
       <body>
 

@@ -1,10 +1,93 @@
-# Tutorial: Tailwind in Fresh
+# Tutorial: Tailwind in Fresh with full intellisense support
 
-Content
+### With help from the dark side...
 
-~~~ ts
-    // test.ts
-    function foo(bar) {
-        var a = 42;
+Create a Fresh project by running the following in the command line:
+
+~~~ powershell 
+    deno run -A -r https://fresh.deno.dev
+~~~
+
+Give it a name.  
+Select "No" when it askes if you would like to use Tailwind CSS.  
+Yes for VS code, that's the editor I am using.
+
+Open the directory that Fresh made.
+
+Create a folder in the root called "tailwind" and open it in a terminal, 
+type "run npm init" and press enter.  
+Keep on pressing enter until the prompts are gone.
+
+Stil in the "tailwind" folder;  
+type "npx tailwindcss init" in the terminal and run it.
+Then copy the below into the tailwind.config.js file.
+
+~~~ js
+    // tailwind.config.js
+    module.exports = {
+        content: [
+            "../routes/**/*.tsx", 
+            "../islands/**/*.tsx", 
+            "../components/**/*.tsx"
+        ],
+        theme: {
+            extend: {},
+        },
+        plugins: [],
     }
 ~~~
+
+Go to the "static" folder of Fresh.  
+Create a folder in "static" called "css".  
+In "css" create 2 files, one called "input.css" and the other "output.css"
+
+Open "input.css" and paste the following inside:
+
+~~~ css 
+    /* input.css */
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+~~~
+
+In the routes folder create a file called "_app.tsx".  
+Copy the below content into it:
+
+~~~ tsx
+
+    import { AppProps } from "$fresh/server.ts";
+    import { Head, asset } from "$fresh/runtime.ts";
+
+    export default function App({ Component }: AppProps) {
+    return(
+            <html>
+                <Head>
+                    <link 
+                        href={asset("/css/output.css")} 
+                        rel="stylesheet" 
+                    />          
+                </Head>
+                <body>
+                    <Component />
+                </body>
+            </html>
+        );
+    }
+~~~
+
+Open "deno.json".
+Modify the start task so it looks like:
+~~~ json
+    // deno.json 
+    {
+        "start": "cd tailwind; npx tailwindcss -i ../static/css/input.css -o ../static/css/output.css --watch & cd ..; deno run -A --watch=static/,routes/ dev.ts",
+    }
+~~~
+
+Open a terminal in the root directory of Fresh and run "deno task start".
+
+You now have full featured Tailwind CSS working in Deno JS with intellisense. 
+
+
+
+
