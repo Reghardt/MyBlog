@@ -18,27 +18,15 @@ import dev from "$fresh/dev.ts";
 //     Deno.writeTextFile(`./compiled/${dirEntry.name}.tsx`,await compile({file: `./md/${dirEntry.name}`}, {...runtime, outputFormat: 'function-body', development: false}) )
 // }
 
-import { esbuild } from "$fresh/src/server/deps.ts";
-// import { Bundler } from "$fresh/src/server/bundle.ts";
-import mdx from '@mdx-js/esbuild'
 
-const files: string[] = []
+
+import { evaluate } from "@mdx-js/mdx"
+import * as runtime from 'preact/jsx-runtime'
 
 for await (const dirEntry of Deno.readDir("md")) {
-    console.log(dirEntry.name);
-    files.push(`./md/${dirEntry.name}`)
+  console.log(dirEntry.name);
+  const res = await evaluate(await Deno.readTextFile(`./md/${dirEntry.name}`), {...runtime, useDynamicImport: true})
+  console.log(res)
 }
-
-console.log(files)
-
-await esbuild.build({
-  entryPoints: files,
-//   outfile: 'output.js',
-
-  outdir: './compiled',
-  format: 'esm',
-  plugins: [mdx({allowDangerousRemoteMdx: true, jsxRuntime: "automatic", jsxImportSource: "preact", useDynamicImport: true /* Other options… */})]
-})
-
 
 await dev(import.meta.url, "./main.ts");
