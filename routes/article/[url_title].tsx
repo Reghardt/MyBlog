@@ -7,6 +7,7 @@ import { IArticleDetails } from "../../Interfaces/IArticleDetails.ts";
 
 export const handler: Handlers = {
   async GET(_req, ctx) {
+    console.log("hello");
     try {
       const { url_title } = ctx.params;
 
@@ -18,7 +19,7 @@ export const handler: Handlers = {
         for (let i = 0; i < articles.length; i++) {
           const article = articles[i];
           if (article.url === url_title) {
-            const res = await evaluate(
+            const articleMDX = await evaluate(
               await Deno.readTextFile(`./md/${article.fileName}.mdx`),
               {
                 ...runtime,
@@ -26,7 +27,21 @@ export const handler: Handlers = {
               },
             );
 
-            return ctx.render({ Ren: res.default({}) });
+            const kv = await Deno.openKv();
+
+            await kv
+              .atomic()
+              .mutate({
+                type: "sum",
+                key: ["articles", article.url],
+                value: new Deno.KvU64(1n),
+              })
+              .commit();
+
+            const res = await kv.get<string>(["articles", article.url]);
+            console.log(res);
+
+            return ctx.render({ articleContent: articleMDX.default({}) });
           }
         }
         return ctx.renderNotFound();
@@ -41,7 +56,7 @@ export const handler: Handlers = {
 
 export default function MarkdownPage({
   data,
-}: PageProps<{ Ren: JSX.Element }>) {
+}: PageProps<{ articleContent: JSX.Element }>) {
   return (
     <>
       <Head>
@@ -49,8 +64,8 @@ export default function MarkdownPage({
       </Head>
 
       <main>
-        <div class={"flex justify-center"}>
-          <div class={"prose w-full p-2"}>{data.Ren}</div>
+        <div class={"flex w-full justify-center"}>
+          <div class={"prose p-2 "}>{data.articleContent}</div>
         </div>
       </main>
     </>

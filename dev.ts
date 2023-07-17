@@ -9,7 +9,7 @@ const articleDetails: IArticleDetails[] = [];
 interface MDXModuleExtended
   extends Awaited<Promise<ReturnType<typeof evaluate>>> {
   title?: string;
-  date?: Date;
+  date?: string;
   peek?: string;
   published?: boolean;
 }
@@ -49,6 +49,8 @@ for await (const dirEntry of Deno.readDir("md")) {
       peek: res.peek,
       published: res.published,
       fileName: dirEntry.name.slice(0, -4),
+      views: 0,
+      image: "",
     });
   }
 }

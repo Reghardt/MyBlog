@@ -1,8 +1,8 @@
 {
   "lock": false,
   "tasks": {
-    "start": "npx tailwindcss -i ./static/css/input.css -o ./static/css/taiwlidn.css --watch & deno run -A --watch=static/,routes/,md/ dev.ts",
-    "update": "deno run -A -r https://fresh.deno.dev/update ."
+    "start": "npx tailwindcss -i ./static/css/input.css -o ./static/css/taiwlidn.css --watch & deno run -A --unstable --watch=static/,routes/,md/ dev.ts ",
+    "update": "deno run -A -r --unstable https://fresh.deno.dev/update ."
   },
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.2.0/",
