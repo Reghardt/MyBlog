@@ -67,8 +67,8 @@ export default function MarkdownPage({
       </Head>
 
       <main>
-        <div class={"flex w-full justify-center"}>
-          <div class={"prose"}>{data.articleContent}</div>
+        <div class={"flex justify-center p-2"}>
+          <div class={"prose w-full"}>{data.articleContent}</div>
         </div>
       </main>
     </>
