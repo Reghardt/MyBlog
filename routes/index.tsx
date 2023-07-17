@@ -9,27 +9,27 @@ import { createElement, render, JSX } from "https://esm.sh/v128/preact@10.15.1/s
 export const handler: Handlers = {
   async GET(_req, ctx){
 
-    const pg = await import("./testComp.tsx")
-    pg.default()
+    // const pg = await import("./testComp.tsx")
+    // pg.default()
     
 
 
-    return ctx.render({articles: articleDetails, comp: pg.default()})
+    return ctx.render({articles: articleDetails}) //, comp: pg.default()
   }
 }
 
-export default function Home(props : PageProps<{articles: IArticleDetails[], comp: JSX.Element}>) {
+export default function Home(props : PageProps<{articles: IArticleDetails[]}>) { //, comp: JSX.Element
 
-  console.log(props.data.comp.props)
+  // console.log(props.data.comp.props)
 
-  const TestElem = props.data.comp
+  // const TestElem = props.data.comp
 
   // return TestElem
 
-  function ren()
-  {
-    return TestElem
-  }
+  // function ren()
+  // {
+  //   return TestElem
+  // }
 
 
   return (
@@ -71,7 +71,7 @@ export default function Home(props : PageProps<{articles: IArticleDetails[], com
               />
             </a>
           </div>
-          {TestElem}
+          {/* {TestElem} */}
 
   
         </div>

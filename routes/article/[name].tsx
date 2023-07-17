@@ -5,23 +5,13 @@ import Test from "../../compiled/0_why_blog.js"
 import * as runtime from 'preact/jsx-runtime'
 import { VNode } from "https://esm.sh/v128/preact@10.15.1/src/index.js";
 
-interface Page {
-    titel: Record<string, unknown>,
-    rawMarkdown: string
-}
-
 export const handler: Handlers = {
     async GET(_req, ctx){
         const {name} = ctx.params;
         const res = await import(`../../compiled/${name}.js`)
-        // console.log(res.default)
-        res
-
-
-        
+        // const re1 = await import("../../compiled/0_why_blog.js")
         try{
-            const rawMarkdown = await Deno.readTextFile(`./md/${name}.mdx`);
-            return ctx.render({rawMarkdown: rawMarkdown, Ren: res})
+            return ctx.render({ Ren: res.default({})})
         }
         catch(e)
         {
@@ -30,9 +20,8 @@ export const handler: Handlers = {
     }
 }
 
-export default function MarkdownPage({data} : PageProps<{rawMarkdown: string, Ren: any}>){
-    
-    const Comp = data.Ren
+export default function MarkdownPage({data} : PageProps<{rawMarkdown: string, Ren: VNode<any>}>){
+
 
     return(
         <>
@@ -43,7 +32,7 @@ export default function MarkdownPage({data} : PageProps<{rawMarkdown: string, Re
             <main>
                 <div class={"flex justify-center"}>
                     <div class={"prose w-full p-2"}>
-                    {Comp.default({})}
+                    {data.Ren}
                     </div>
                 </div>
 
