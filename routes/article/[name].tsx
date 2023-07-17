@@ -12,7 +12,7 @@ export const handler: Handlers = {
             const {name} = ctx.params;
             const res = await import(`../../compiled/${name}.js`)
             // const re1 = await import("../../compiled/0_why_blog.js")
-            return ctx.render({ Ren: res.default({})})
+            return ctx.render({ Ren: res})
         }
         catch(e)
         {
@@ -21,7 +21,7 @@ export const handler: Handlers = {
     }
 }
 
-export default function MarkdownPage({data} : PageProps<{rawMarkdown: string, Ren: VNode<any>}>){
+export default function MarkdownPage({data} : PageProps<{rawMarkdown: string, Ren: any}>){
 
 
     return(
@@ -33,7 +33,7 @@ export default function MarkdownPage({data} : PageProps<{rawMarkdown: string, Re
             <main>
                 <div class={"flex justify-center"}>
                     <div class={"prose w-full p-2"}>
-                    {data.Ren}
+                    {data.Ren.default({})}
                     </div>
                 </div>
 
