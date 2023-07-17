@@ -26,21 +26,21 @@ export const handler: Handlers = {
               },
             );
 
-            if (Deno.env.get("ISPROD") && Deno.env.get("ISPROD") === "true") {
-              const kv = await Deno.openKv();
+            // if (Deno.env.get("ISPROD") && Deno.env.get("ISPROD") === "true") {
+            const kv = await Deno.openKv();
 
-              await kv
-                .atomic()
-                .mutate({
-                  type: "sum",
-                  key: ["articles", article.url],
-                  value: new Deno.KvU64(1n),
-                })
-                .commit();
+            await kv
+              .atomic()
+              .mutate({
+                type: "sum",
+                key: ["articles", article.url],
+                value: new Deno.KvU64(1n),
+              })
+              .commit();
 
-              const res = await kv.get<string>(["articles", article.url]);
-              console.log(res);
-            }
+            const res = await kv.get<string>(["articles", article.url]);
+            console.log(res);
+            // }
 
             return ctx.render({
               articleContent: articleMDX.default({}),
