@@ -1,4 +1,6 @@
 import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "preact/jsx-runtime";
+const name = "World";
+const title = "Hi, " + name + "!";
 function _createMdxContent(props) {
   const _components = Object.assign({
     h1: "h1",
@@ -20,5 +22,7 @@ function MDXContent(props = {}) {
 }
 var first_dev_default = MDXContent;
 export {
-  first_dev_default as default
+  first_dev_default as default,
+  name,
+  title
 };
