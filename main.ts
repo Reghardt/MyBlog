@@ -5,6 +5,8 @@
 /// <reference lib="deno.ns" />
 /// <reference lib="deno.unstable" />
 
+Deno.env.set("ISPROD", "false");
+
 import "$std/dotenv/load.ts";
 
 import { start } from "$fresh/server.ts";

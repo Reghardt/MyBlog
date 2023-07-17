@@ -3,11 +3,23 @@ export const date = "17 Jul 2023";
 export const peek = "";
 export const published = false;
 
+import IconEye from "https://deno.land/x/tabler_icons_tsx@0.0.3/tsx/eye.tsx";
+
 # {title}
+<div class="flex">
+    <div>
+        {new Date(date).toLocaleDateString()}
+    </div>
+    <div class="w-full"></div>
+    <div class="flex items-center gap-2">
+        <IconEye/>
+        <div>10</div>
+    </div>
+</div>
 
 In his book Range, David Epstein writes about a study in which researchers Taylor and Greve analysed the commercial success of thousands of comic books from 234 publishers since 1971.
 
-They wanted to find out what best predicted the financial success of comic book creators, and what could increase their value variance, or in other words: the chance that a creator makes a comic book that failed badly or exceeds expectations compared to their usual work.
+They wanted to find out what best predicted the financial success of comic book creators, and what could increase their value variance, or in other words: the chance that a creator makes a comic book that failed miserably or exceeds expectations compared to their usual work.
 
 Taylor and Greve made some predictions;
 

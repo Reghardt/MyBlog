@@ -7,7 +7,6 @@ import { IArticleDetails } from "../../Interfaces/IArticleDetails.ts";
 
 export const handler: Handlers = {
   async GET(_req, ctx) {
-    console.log("hello");
     try {
       const { url_title } = ctx.params;
 
@@ -27,21 +26,25 @@ export const handler: Handlers = {
               },
             );
 
-            const kv = await Deno.openKv();
+            if (Deno.env.get("ISPROD") && Deno.env.get("ISPROD") === "true") {
+              const kv = await Deno.openKv();
 
-            await kv
-              .atomic()
-              .mutate({
-                type: "sum",
-                key: ["articles", article.url],
-                value: new Deno.KvU64(1n),
-              })
-              .commit();
+              await kv
+                .atomic()
+                .mutate({
+                  type: "sum",
+                  key: ["articles", article.url],
+                  value: new Deno.KvU64(1n),
+                })
+                .commit();
 
-            const res = await kv.get<string>(["articles", article.url]);
-            console.log(res);
+              const res = await kv.get<string>(["articles", article.url]);
+              console.log(res);
+            }
 
-            return ctx.render({ articleContent: articleMDX.default({}) });
+            return ctx.render({
+              articleContent: articleMDX.default({}),
+            });
           }
         }
         return ctx.renderNotFound();
@@ -65,7 +68,7 @@ export default function MarkdownPage({
 
       <main>
         <div class={"flex w-full justify-center"}>
-          <div class={"prose p-2 "}>{data.articleContent}</div>
+          <div class={"prose"}>{data.articleContent}</div>
         </div>
       </main>
     </>

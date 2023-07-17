@@ -1076,15 +1076,6 @@ video {
   padding-bottom: 0.25rem;
 }
 
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
 .no-underline {
   text-decoration-line: none;
 }
