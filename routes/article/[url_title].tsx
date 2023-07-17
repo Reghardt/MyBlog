@@ -1,0 +1,58 @@
+import { Head } from "$fresh/runtime.ts";
+import { Handlers, PageProps } from "$fresh/server.ts";
+import { evaluate } from "@mdx-js/mdx";
+import * as runtime from "preact/jsx-runtime";
+import { JSX } from "https://esm.sh/v128/preact@10.15.1/src/index.js";
+import { IArticleDetails } from "../../Interfaces/IArticleDetails.ts";
+
+export const handler: Handlers = {
+  async GET(_req, ctx) {
+    try {
+      const { url_title } = ctx.params;
+
+      const articles = JSON.parse(
+        await Deno.readTextFile("./json/articles.json"),
+      ) as IArticleDetails[];
+
+      if (articles) {
+        for (let i = 0; i < articles.length; i++) {
+          const article = articles[i];
+          if (article.url === url_title) {
+            const res = await evaluate(
+              await Deno.readTextFile(`./md/${article.fileName}.mdx`),
+              {
+                ...runtime,
+                useDynamicImport: true,
+              },
+            );
+
+            return ctx.render({ Ren: res.default({}) });
+          }
+        }
+        return ctx.renderNotFound();
+      } else {
+        return ctx.renderNotFound();
+      }
+    } catch (e) {
+      return ctx.renderNotFound();
+    }
+  },
+};
+
+export default function MarkdownPage({
+  data,
+}: PageProps<{ Ren: JSX.Element }>) {
+  return (
+    <>
+      <Head>
+        <title>{}</title>
+      </Head>
+
+      <main>
+        <div class={"flex justify-center"}>
+          <div class={"prose w-full p-2"}>{data.Ren}</div>
+        </div>
+      </main>
+    </>
+  );
+}

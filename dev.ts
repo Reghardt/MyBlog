@@ -2,17 +2,63 @@
 import dev from "$fresh/dev.ts";
 import { evaluate } from "@mdx-js/mdx";
 import * as runtime from "preact/jsx-runtime";
+import { IArticleDetails } from "./Interfaces/IArticleDetails.ts";
 
-//npx onchange \"./routes\" -- npx prettier --write ./routes/index.tsx --plugin=prettier-plugin-tailwindcss &
+const articleDetails: IArticleDetails[] = [];
+
+interface MDXModuleExtended
+  extends Awaited<Promise<ReturnType<typeof evaluate>>> {
+  title?: string;
+  date?: Date;
+  peek?: string;
+  published?: boolean;
+}
+
+function createUrlStringFromTitle(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/-+/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/\'|:|;|\?|\!|\(|\)/g, "");
+}
 
 for await (const dirEntry of Deno.readDir("md")) {
-  console.log(dirEntry.name);
-  const res = await evaluate(await Deno.readTextFile(`./md/${dirEntry.name}`), {
-    ...runtime,
-    useDynamicImport: true,
-  });
-  console.log(res);
+  const res = (await evaluate(
+    await Deno.readTextFile(`./md/${dirEntry.name}`),
+    {
+      ...runtime,
+      useDynamicImport: true,
+    },
+  )) as MDXModuleExtended;
+
+  if (res.title === undefined) {
+    throw new TypeError(`Article ${dirEntry.name} does not have a title`);
+  } else if (res.date === undefined) {
+    throw new TypeError(`Article ${dirEntry.name} does not have a date.`);
+  } else if (res.peek === undefined) {
+    throw new TypeError(`Article ${dirEntry.name} does not have peek string`);
+  } else if (res.published === undefined) {
+    throw new TypeError(
+      `Article ${dirEntry.name} does not have a published boolean.`,
+    );
+  } else {
+    articleDetails.push({
+      title: res.title,
+      url: createUrlStringFromTitle(res.title),
+      date: res.date,
+      peek: res.peek,
+      published: res.published,
+      fileName: dirEntry.name.slice(0, -4),
+    });
+  }
 }
+
+// console.log(JSON.stringify(articleDetails));
+
+await Deno.writeTextFile(
+  "./json/articles.json",
+  JSON.stringify(articleDetails),
+);
 
 // const proc = new Deno.Command("cmd", {
 //   args: [

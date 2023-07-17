@@ -1,11 +1,14 @@
 import { Head } from "$fresh/runtime.ts";
 import { useSignal } from "@preact/signals";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { articleDetails, IArticleDetails } from "../articleDetails.ts";
+import { IArticleDetails } from "../Interfaces/IArticleDetails.ts";
 
 export const handler: Handlers = {
-  GET(_req, ctx) {
-    return ctx.render({ articles: articleDetails });
+  async GET(_req, ctx) {
+    const articles = JSON.parse(
+      await Deno.readTextFile("./json/articles.json"),
+    ) as IArticleDetails[];
+    return ctx.render({ articles: articles });
   },
 };
 
@@ -23,10 +26,7 @@ export default function Home(
             <div class={"grid grid-cols-1 gap-4"}>
               {props.data.articles.reverse().map((article) => {
                 return (
-                  <a
-                    class={"no-underline"}
-                    href={`/article/${article.mdxFileName}`}
-                  >
+                  <a class={"no-underline"} href={`/article/${article.url}`}>
                     <div class={" rounded bg-gray-100 p-2 hover:bg-gray-200"}>
                       <h2 class={"my-6"}>
                         <div>{article.title}</div>
