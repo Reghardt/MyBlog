@@ -28,14 +28,14 @@ Create a new Fresh project by running:
 
 Give it a name.  
 Select "Yes" when it askes if you would like to use Tailwind CSS.  
-(Even though it is actually Twind being installed). This step is to show you how to replace TWind if your project already uses it.
+(Even though it is actually Twind being installed). This step is to show you how to replace Twind if your project already uses it.
 
 Yes for VS code, that's the editor I am using. (This tutorial has not been tested with other editors)
 
 Open your Fresh project folder in VS Code.
 
 Go to View > Command Palette and run "Deno Initialize Workspace Configuration".
-Select Yes (we will change this later)
+Select Yes for linting (we will change this later). Unstable APIs are up to you.
 
 Open "deno.json" and remove the lines:
 
@@ -60,7 +60,7 @@ Next open "main.ts" and do the following:
     await start(manifest);
 ~~~
 
-Finaly delete "twind.config.js".
+Finaly delete "twind.config.ts".
 
 
 Create a "tailwind.config.js" file in the root and copy the below into it:
@@ -76,12 +76,12 @@ Create a "tailwind.config.js" file in the root and copy the below into it:
     };
 ~~~
 
-You can remove the typography plugin if you dont want to use it.
-The type import line will give you a error. We'll fix that soon.
+You can remove the typography plugin if you don't want to use it.  
+The type import line will give you a error. We'll fix that in the next step.
 
 Run "npm init", give it any name and keep on pressing enter till the end.  
 
-run the following command:
+Run the following command:
 
 ~~~ powershell 
     npm i -D tailwindcss @tailwindcss/typography prettier @types/prettier prettier-plugin-tailwindcss
@@ -89,8 +89,8 @@ run the following command:
 
 note: update .gitignore to exclude node_modules
 
-Assuming you have the Tailwind CSS IntelliSense plugin installed you can already see the Intellisense working if you hover ovver a taiwlind class in "index.tsx".
-But tailwind itself isn't working yet, we will do that next.
+Assuming you have the Tailwind CSS IntelliSense plugin installed you can already see the Intellisense working if you hover over a Taiwlind class in "index.tsx".
+But Tailwind itself isn't working yet, we will do that next.
 
 Create a "css" folder in the "static" folder of Fresh.
 In "css", create 2 files, "index.css" and "tailwind.css".
@@ -117,7 +117,7 @@ Copy the below content into it:
             <html>
                 <Head>
                     <link 
-                        href={asset("/css/twailwind.css")} 
+                        href={asset("/css/tailwind.css")} 
                         rel="stylesheet" 
                     />          
                 </Head>
@@ -138,10 +138,10 @@ Modify the start task so it looks like:
     }
 ~~~
 
-Run your fresh Project with "deno task run".
-Tailwind should now be fully functional. Add a Twailwind class to something in "index.tsx" to see if it workes.
+Run your fresh Project with "deno task start".
+Tailwind should now be fully functional. Change or add a Twailwind class in "index.tsx" to see if it works.
 
-If you installed the typography plugin test it by modifying "index.tsx" like so: 
+{/* If you installed the typography plugin test it by modifying "index.tsx" like so: 
 
 ~~~ tsx
     //index.tsx
@@ -160,41 +160,54 @@ If you installed the typography plugin test it by modifying "index.tsx" like so:
         </>
     );
     }
-~~~
+~~~ */}
 
 
 ## Auto Class Sorting with Prettier
-This part is optional for if you want to auto sort tailwind classes with prettier.
+This part is optional, unless you want to auto sort Tailwind classes with prettier.
 
-If you have not installed Prettier in a previous step do so by running:
+Install the VS Code Prettier Extention as well as the Prettier node module if you have not done so already in a previous step:
 
 ~~~ powershell
     npm i -D prettier prettier-plugin-tailwindcss
 ~~~
 
 Create two files in the root of your project:
-".prettierrc.cjs" and ".prettierignore"
+".prettierrc.js" and ".prettierignore"
+
+tip: remember the "rc" part in .prettier***rc***.js
 
 Paste the following in ".prettierrc.cjs":
 
 ~~~ js
-    //prettierrc.cjs
+    //prettierrc.js
     /** @type {import("./node_modules/@types/prettier/index.d.ts").Options} */
     module.exports = {
-        tabWidth: 2,
         tabWidth: 2,
         useTabs: false,
         plugins: ["./node_modules/prettier-plugin-tailwindcss/dist/index.js"],
     };
 ~~~
 
-Next go to File>Preferences>Settings
-I reccomend you change from User to Workspace settings as to not apply the following changes globally.
+To make Prettier and auto sorting take effect, go to File>Preferences>Settings.  
+I recommend you change from "User" to "Workspace" settings as to not apply the following changes globally.
 
 Search for "default formatter" and select "Prettier - Code Formatter" in the dropdown.
-Then search for "Format On Save" and check the checkbox.
+Then search for "Format On Save" and check it.
 
 Close and restart VS Code, and run Fresh.
 Auto Class Sorting should now be in effect.
+
+If auto sorting does not seem to work, try the following:  
+Open any ".tsx" file. Then do "ctrl+shift+p",
+select "Format Document With..."
+
+At the bottom select "Default Formatter..."  
+It should then say: "Select a default formatter for Typescript JSX files"  
+Select Prettier.
+
+  
+  
+I hope this tutorial helped you. Please leave a hand clap if it did. 
 
 
