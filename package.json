@@ -10,6 +10,7 @@
   "license": "ISC",
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
+    "@types/prettier": "^2.7.3",
     "onchange": "^7.1.0",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.4.1",
