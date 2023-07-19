@@ -1,65 +1,117 @@
 import { Head } from "$fresh/runtime.ts";
-import { Handlers, PageProps } from "$fresh/server.ts";
+import { Handlers, PageProps, RouteContext } from "$fresh/server.ts";
 import { evaluate } from "@mdx-js/mdx";
 import * as runtime from "preact/jsx-runtime";
-import { JSX } from "https://esm.sh/v128/preact@10.15.1/src/index.js";
 import { IArticleDetails } from "../../Interfaces/IArticleDetails.ts";
 
-export const handler: Handlers = {
-  async GET(_req, ctx) {
+function getArticleIndex() {
+  return new Promise<IArticleDetails[]>(async (accept, reject) => {
     try {
-      const { url_title } = ctx.params;
-
-      const articles = JSON.parse(
-        await Deno.readTextFile("./json/articles.json"),
-      ) as IArticleDetails[];
-
-      if (articles) {
-        for (let i = 0; i < articles.length; i++) {
-          const article = articles[i];
-          if (article.url === url_title) {
-            const articleMDX = await evaluate(
-              await Deno.readTextFile(`./md/${article.fileName}.mdx`),
-              {
-                ...runtime,
-                useDynamicImport: true,
-              },
-            );
-
-            // if (Deno.env.get("ISPROD") && Deno.env.get("ISPROD") === "true") {
-            const kv = await Deno.openKv();
-
-            await kv
-              .atomic()
-              .mutate({
-                type: "sum",
-                key: ["articles", article.url],
-                value: new Deno.KvU64(1n),
-              })
-              .commit();
-
-            const res = await kv.get<string>(["articles", article.url]);
-            console.log(res);
-            // }
-
-            return ctx.render({
-              articleContent: articleMDX.default({}),
-            });
-          }
-        }
-        return ctx.renderNotFound();
-      } else {
-        return ctx.renderNotFound();
-      }
+      accept(
+        JSON.parse(
+          await Deno.readTextFile("./json/articles.json"),
+        ) as IArticleDetails[],
+      );
     } catch (e) {
-      return ctx.renderNotFound();
+      reject();
     }
-  },
-};
+  });
+}
 
-export default function MarkdownPage({
-  data,
-}: PageProps<{ articleContent: JSX.Element }>) {
+function retreiveArticleContentFromIndex(
+  url_title: string,
+  articleIndex: IArticleDetails[],
+) {
+  return new Promise<string>(async (accept, reject) => {
+    for (let i = 0; i < articleIndex.length; i++) {
+      const article = articleIndex[i];
+      if (article.url === url_title) {
+        try {
+          accept(await Deno.readTextFile(`./md/${article.fileName}.mdx`));
+        } catch (e) {
+          reject();
+        }
+      }
+    }
+  });
+}
+
+function evaluateArticle(articleContent: string) {
+  return new Promise<Awaited<ReturnType<typeof evaluate>>>(
+    async (accept, reject) => {
+      try {
+        accept(
+          evaluate(articleContent, {
+            ...runtime,
+            useDynamicImport: true,
+          }),
+        );
+      } catch (e) {
+        reject();
+      }
+    },
+  );
+}
+
+// export const handler: Handlers = {
+//   async GET(_req, ctx) {
+//     try {
+//       const { url_title } = ctx.params;
+
+//       const articleIndex = await getArticleIndex();
+
+//       if (articleIndex) {
+//         for (let i = 0; i < articleIndex.length; i++) {
+//           const article = articleIndex[i];
+//           if (article.url === url_title) {
+//             const articleMDX = await evaluate(
+//               await Deno.readTextFile(`./md/${article.fileName}.mdx`),
+//               {
+//                 ...runtime,
+//                 useDynamicImport: true,
+//               },
+//             );
+
+//             // if (Deno.env.get("ISPROD") && Deno.env.get("ISPROD") === "true") {
+//             const kv = await Deno.openKv();
+
+//             await kv
+//               .atomic()
+//               .mutate({
+//                 type: "sum",
+//                 key: ["articles", article.url],
+//                 value: new Deno.KvU64(1n),
+//               })
+//               .commit();
+
+//             const res = await kv.get<string>(["articles", article.url]);
+//             console.log(res);
+//             // }
+
+//             return ctx.render({
+//               articleContent: articleMDX.default({}),
+//             });
+//           }
+//         }
+//         return ctx.renderNotFound();
+//       } else {
+//         return ctx.renderNotFound();
+//       }
+//     } catch (e) {
+//       return ctx.renderNotFound();
+//     }
+//   },
+// };
+
+export default async function MarkdownPage(req: Request, ctx: RouteContext) {
+  const { url_title } = ctx.params;
+  const articleIndex = await getArticleIndex();
+  const articleContent = await retreiveArticleContentFromIndex(
+    url_title,
+    articleIndex,
+  );
+  const evaluatedArticle = await evaluateArticle(articleContent);
+
   return (
     <>
       <Head>
@@ -68,7 +120,7 @@ export default function MarkdownPage({
 
       <main>
         <div class={"flex justify-center p-2"}>
-          <div class={"prose w-full"}>{data.articleContent}</div>
+          <div class={"prose w-full"}>{evaluatedArticle.default({})}</div>
         </div>
       </main>
     </>
