@@ -3,54 +3,32 @@ import { Handlers, PageProps, RouteContext } from "$fresh/server.ts";
 import { evaluate } from "@mdx-js/mdx";
 import * as runtime from "preact/jsx-runtime";
 import { IArticleDetails } from "../../Interfaces/IArticleDetails.ts";
+import Error404 from "../_404.tsx";
 
-function getArticleIndex() {
-  return new Promise<IArticleDetails[]>(async (accept, reject) => {
-    try {
-      accept(
-        JSON.parse(
-          await Deno.readTextFile("./json/articles.json"),
-        ) as IArticleDetails[],
-      );
-    } catch (e) {
-      reject();
-    }
-  });
+async function getArticleIndex() {
+  return JSON.parse(
+    await Deno.readTextFile("./json/articles.json"),
+  ) as IArticleDetails[];
 }
 
-function retreiveArticleContentFromIndex(
+async function retreiveArticleContentFromIndex(
   url_title: string,
   articleIndex: IArticleDetails[],
 ) {
-  return new Promise<string>(async (accept, reject) => {
-    for (let i = 0; i < articleIndex.length; i++) {
-      const article = articleIndex[i];
-      if (article.url === url_title) {
-        try {
-          accept(await Deno.readTextFile(`./md/${article.fileName}.mdx`));
-        } catch (e) {
-          reject();
-        }
-      }
+  for (let i = 0; i < articleIndex.length; i++) {
+    const article = articleIndex[i];
+    if (article.url === url_title) {
+      return await Deno.readTextFile(`./md/${article.fileName}.mdx`);
     }
-  });
+  }
+  throw new Error("no article with that name found");
 }
 
 function evaluateArticle(articleContent: string) {
-  return new Promise<Awaited<ReturnType<typeof evaluate>>>(
-    async (accept, reject) => {
-      try {
-        accept(
-          evaluate(articleContent, {
-            ...runtime,
-            useDynamicImport: true,
-          }),
-        );
-      } catch (e) {
-        reject();
-      }
-    },
-  );
+  return evaluate(articleContent, {
+    ...runtime,
+    useDynamicImport: true,
+  });
 }
 
 // export const handler: Handlers = {
@@ -105,24 +83,30 @@ function evaluateArticle(articleContent: string) {
 
 export default async function MarkdownPage(req: Request, ctx: RouteContext) {
   const { url_title } = ctx.params;
-  const articleIndex = await getArticleIndex();
-  const articleContent = await retreiveArticleContentFromIndex(
-    url_title,
-    articleIndex,
-  );
-  const evaluatedArticle = await evaluateArticle(articleContent);
 
-  return (
-    <>
-      <Head>
-        <title>{}</title>
-      </Head>
+  try {
+    const articleIndex = await getArticleIndex();
+    const articleContent = await retreiveArticleContentFromIndex(
+      url_title,
+      articleIndex,
+    );
+    const evaluatedArticle = await evaluateArticle(articleContent);
 
-      <main>
-        <div class={"flex justify-center p-2"}>
-          <div class={"prose w-full"}>{evaluatedArticle.default({})}</div>
-        </div>
-      </main>
-    </>
-  );
+    return (
+      <>
+        <Head>
+          <title>{}</title>
+        </Head>
+
+        <main>
+          <div class={"flex justify-center p-2"}>
+            <div class={"prose w-full"}>{evaluatedArticle.default({})}</div>
+          </div>
+        </main>
+      </>
+    );
+  } catch (e) {
+    console.log(e);
+    return Error404();
+  }
 }
