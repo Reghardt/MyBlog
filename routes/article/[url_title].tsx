@@ -4,6 +4,7 @@ import { evaluate } from "@mdx-js/mdx";
 import * as runtime from "preact/jsx-runtime";
 import { IArticleDetails } from "../../Interfaces/IArticleDetails.ts";
 import Error404 from "../_404.tsx";
+import LikeArticle from "../../islands/LikeArticle.tsx";
 
 async function getArticleIndex() {
   return JSON.parse(
@@ -31,6 +32,17 @@ function evaluateArticle(articleContent: string) {
   });
 }
 
+async function incrementArticleViews(url_title: string) {
+  const kv = await Deno.openKv();
+  await kv
+    .atomic()
+    .mutate({
+      type: "sum",
+      key: ["articles", url_title],
+      value: new Deno.KvU64(1n),
+    })
+    .commit();
+}
 // export const handler: Handlers = {
 //   async GET(_req, ctx) {
 //     try {
@@ -90,6 +102,7 @@ export default async function MarkdownPage(req: Request, ctx: RouteContext) {
       url_title,
       articleIndex,
     );
+    incrementArticleViews(url_title);
     const evaluatedArticle = await evaluateArticle(articleContent);
 
     return (
@@ -99,8 +112,11 @@ export default async function MarkdownPage(req: Request, ctx: RouteContext) {
         </Head>
 
         <main>
-          <div class={"flex justify-center p-2"}>
+          <div class={"grid justify-center p-2"}>
             <div class={"prose w-full"}>{evaluatedArticle.default({})}</div>
+            <div class={"mb-10 mt-6 flex justify-end"}>
+              <LikeArticle url_title={url_title} />
+            </div>
           </div>
         </main>
       </>

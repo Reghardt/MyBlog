@@ -5,16 +5,6 @@ import IconEye from "https://deno.land/x/tabler_icons_tsx@0.0.3/tsx/eye.tsx";
 
 export const handler: Handlers = {
   async GET(_req, ctx) {
-    // const kv = await Deno.openKv();
-
-    // Persist an object at the users/alice key.
-    // await kv.set(["users", "alice"], { name: "Alice" });
-
-    // // Read back this key.
-    // const res = await kv.get(["users", "alice"]);
-    // console.log(res.key); // [ "users", "alice" ]
-    // console.log(res.value); // { name: "Alice" }
-
     const articles = JSON.parse(
       await Deno.readTextFile("./json/articles.json"),
     ) as IArticleDetails[];
