@@ -1,8 +1,78 @@
-export const title = "A CS Graduate's first attempt: Marco Polo";
-export const date = "17 Jul 2023";
+export const title = "A developer's first attempt to make something";
+export const date = "8 Aug 2023";
 export const peek = "";
 export const published = false;
 
 # {title}
 
-Some content here
+
+### Intro
+Fresh out of college, I had an idea, I had a plan. It was going to be super successful and make a lot of money.
+
+Well, it didn't exactly turn out the way I hoped. It wasn't too successful at all really. I lost quite a bit of money and had a single frequent user. 
+
+But if I look back and compare my two selfs, one before starting the project and the other after, it's like comparing two different people.
+
+One battled to grasp React and struggled to get it to work nicely in the environment I wanted, 
+and the other didn't even break half a sweat setting up [tRPC](https://trpc.io/) in a react and express [Turporepo](https://turbo.build/repo) by pulling in knowledge straight from reading the relevant documentation. 
+
+An eye roll for some, but I felt accomplished, especially since I didn't have experience with any of tools I used up to then, except for express.
+It felt good to be able to see where I am and where I was.
+
+Even if the project did not meet my expectations financially, it made me a better developer by significant leaps and bounds. 
+
+This is the story of a developer's first attempt to make something.
+
+### Backstory
+The auction house my friend (now girlfriend..) works at got the contract to auction off the whole interior of a beautiful grand hotel that was closing down. 
+The action house did not have enough people available for the first week of the job so I volunteered to assist.
+
+The auction had already passed and our job was to label and get each item to their respective buyer.
+This was no easy task as the items in the hotel varied greatly in size and shape, from chinese porcelain, to intricate paintings, huge rugs, pottery, long tables and tall statues.
+Grand hotel is no overstatement, it was magnificent.
+
+My job was to label everything, my girlfriend managed the logistics of getting the items to the buyers via a six axel truck.
+She first had to group buyers by relative area (by searching for each address on google maps).
+Then look up the combined volume of what each buyer bought.
+Based on that she had to order the buyers on the list to optimize for time.
+And finally load the items on the truck in a specific sequence: ie the first stop's items will be loaded last ( to be delivered first) 
+and the last last stop's items will be loaded first (to be delivered last).
+
+She did all of this by hand using pen and paper and each route took about an hour to plan.
+
+This problem sparked my interest and I decided to see if I can automate some of the steps.
+
+I deconstructed the job into the following problems:  
+
+Addresses:  
+1\. Searching for individual addresses takes a long time.  
+2\. Keeping track of each address relative to the others are error prone.  
+Possible solution: A birds eye view of all the addresses on a map.
+
+Buyer Volume:  
+Unless the auction software exposes a DB api not much can be automated here.
+
+Delivery sequence and statistics:  
+3\. Fastest delivery order very unlikely if manually guesstimated.  
+4\. Estimated duration and return time valuable for planning.  
+Solution: Traveling salesman problem -> route finding algorithm.  
+
+Loading order:  
+5\. Simply the reverse of the delivery order.
+
+Delivery route consumption:  
+6\. What will the route look like? Table form?  
+7\. How will the driver known about it? Printed? Digital?  
+Possible solution: A trip sheet is currently made in Excel, printed and given to the driver -> a printable table is good enough.
+
+With these requirements in mind, I set out to solve the problem.
+
+### Early Development
+
+### Later Development
+
+### Outreach
+
+### Moving On
+
+### Takeaway
