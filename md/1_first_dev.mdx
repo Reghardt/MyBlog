@@ -68,8 +68,48 @@ Possible solution: A trip sheet is currently made in Excel, printed and given to
 With these requirements in mind, I set out to solve the problem.
 
 ### Early Development
+Early development was rough. 
+I only had experience with c++ and Angular at this time, 
+and I figured c++ wasn't the right tool for the job so I chose the Angular approach.
+
+A basic proof of concept prototype was next. 
+It had to: 
+Accept a list of addresses, show them on the map and reorder them according to the fastest route.
+
+For the map I decided to use Google Maps due to their generous free credit each month (after which it gets expensive quick). 
+Furthermore, I believe they have the best data on South African roads and addresses. 
+
+The first big problem was finding the fastest single route, not wanting to write a complex algorithm myself I researched and found out
+that the Google Maps API has a "optimize route" option that can be selected when finding a route with multiple stops.
+I don't know how that option solves the traveling salesman problem but I guess they might be using something like [Or Tools](https://developers.google.com/optimization) on the backend.
+So that was an easy solution to one of the biggest problems, at least for this simple case.
+
+It did not take too long to get a basic prototype up and running with Angular, and it worked well. Address could be typed into rows and searched for using the Google Geocoder API, 
+the address are then displayed on the map and finally a route could be found that rearranges the addresses by fastest route.
+
+The biggest problem though, was actually using the rearranged list of addresses.
+Rearrange the addresses in Excel by hand by looking at the app's order? 
+Copy and paste to Excel? Or Generate A pdf? But then a whole lot of other information will also need to be given to the app like name and surname, cellphone nr...
+It was problematic, I did not forsee this step as the biggest problem.
+
+I looked into any "Excel like" spreadsheet libraries available in javascript, and there were some good ones, but I also stumbled upon the Excel API.
+
+Now this was really interesting. It allows a web app to run right inside of Excel and interact with data on the spreadsheet programmatically!
+This was perfect, especially since people already use Excel and they usually tend to stick to what they already know and use. 
+It wont be a totally new and unfamiliar app to users,
+it will merely be an extension to a tool they are already familiar with.
+
+But then a new problem emerged. A problem caused by something all programmers dread and fear. 
+The mere thought of it causes a cold sweat followed by an uncontrollable twitch.
+It's name inflicts pain on any programmer who dares utter it, and to anyone unfortunate enough to be in the presence of its utterance.
+A great darkness, undefeated until recently... It goes by the name of... of Internet Explorer 11.
+
 
 ### Later Development
+
+This was about 2 years ago at the time of writing and Internet Explorer has not been killed of entirely yet. Guess where it was still used?
+The environment in which Excel addons run in...
+This caused a series of headaches, one being that 
 
 ### Outreach
 
