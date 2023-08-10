@@ -95,8 +95,9 @@ It was problematic, I did not forsee this step as the biggest problem.
 I looked into any "Excel like" spreadsheet libraries available in javascript, and there were some good ones, but I also stumbled upon the Excel API.
 
 Now this was really interesting. It allows a web app to run right inside of Excel and interact with data on the spreadsheet programmatically!
-This was perfect, especially since people already use Excel and they usually tend to stick to what they already know and use. 
-It wont be a totally new and unfamiliar app to users,
+All Excel requires is a manifest file that pointed to the url your website is hosted on.
+This was perfect, especially since people already use Excel for trip sheets and they usually tend to stick to what they already know. 
+It won't be a totally new and unfamiliar app to users,
 it will merely be an extension to a tool they are already familiar with.
 
 But then a new problem emerged. A problem caused by something all programmers dread and fear. 
@@ -105,11 +106,51 @@ It's name inflicts pain on any programmer who dares utter it, and to anyone unfo
 A great darkness, undefeated until recently... It goes by the name of... of Internet Explorer 11.
 
 
-### Later Development
+### Making it work
 
 This was about 2 years ago at the time of writing and Internet Explorer has not been killed of entirely yet. Guess where it was still used?
-The environment in which Excel addons run in...
-This caused a series of headaches, one being that 
+The environment in which Excel addons are supposed to run in...
+This caused a series of headaches, one being that I had just written the proof of concept in Angular 12, and second, lots of libraries don't support IE11 anymore.
+Like for instance Angular Material.
+
+I spend a few days trying to get Angular to work in the IE11 environment to no avail.
+I was really really sick of struggling, so much so that I decided to let my beloved Angular go in search of greener pastures.
+
+The other two frameworks the Excel Addon Docs had tutorials for was React (of course) and Vue (of course).
+I didn't know a lot about Vue at all so I decided to try React. 
+This was an odd choice because the last time I tried React (very briefly) I could not get my head around it and did not like it at all.
+This was in my compiler construction course though.. Yes I wrote a simple compiler in JS, with BASIC as the target language. It was a lot of fun.
+
+Anyway, after a lot of trial and error, and meticulously picking apart the Excel React starter template I could make a new up to date React 17 Excel add in from scratch.
+It is worth mentioning that this was still in IE11, and I needed some hackery to keep everything together, for instance, not one of their templates supported routing. 
+this is because, for some reason the Excel API library deletes some function in the global object that is required for routing. 
+It had to be cached before loading the library and restored after. Then routing worked perfectly. Thanks Stack Overflow.
+
+Skip ahead a few months of development and I had learned a lot. I tried many things that failed as I did not know better, but I leaned every step of the way.
+And I think I became rather good at React, and dare I say, I started to like it. I started to like it a lot. Maybe even more than Angular. Gasp!
+
+### Warming up to React
+I was some mixture of laughter, disbelieve and disgust when I searched "React routing" the first time and learned that react does not have built in Routing.
+How could it not have built in routing? You have to download a third party library?
+
+It was like this for everything in React. 
+In contrast to angular, it includes everything, even the kitchen sink by default or as a first party library. 
+If you wanted to use the kitchen sink in React you'd have to go and download the third party KitchenSink.js library.
+
+But later on as I got more experienced and comfortable with React I realized, that feeling I had had vanished.
+I realized that it is actually extremely beneficial that React only focuses on doing a small set of thing right and letting the community 
+write libraries that add the rest to their hearts content.
+The result of this is unbound freedom, and freedom leads to innovation. 
+Want to do routing in react? There are 500+ different libraries, all with different ways of doing things. 
+Sometimes two libraries may have the same goal but approach the problem with two totally different mental paradigms.
+Just look at the smorgasbord of different state management libraries there are, or meta frameworks.
+
+They are all fantastic and and amazing in their own right, and I find that extremely exciting. 
+React is innovating and evolving at light speed and thats a good thing, and if it's not it evolving it's some other framework that was inspired by it
+
+### The App
+
+
 
 ### Outreach
 
