@@ -155,10 +155,35 @@ It is missing a payment system (I did that in the next version) and there are so
 
 But none the less, I learned a lot and I am proud of what I have accomplished, especially since this is my first real attempt at building something.
 
+#### 1\.
+
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/add_in.PNG)](https://remblog.s3.af-south-1.amazonaws.com/add_in.PNG)
-Whats this?:
+Whats this?:  
+Here you can see the app running inside of Excel. This is the login screen a user is greeted with when opening the app.   
 
 How does it work?:
+For Microsoft sign in it uses their MSal service which returns a user token containing a user's MS Id, among other things.
+On clicking the "Sign in with Microsoft" button the user is navigated to a static page hosted on the server (Express + EJS) which allows the user to sign in with MS.
+The server then receives the MS auth token, creates a Bearer from than an attaches it to the header of a redirect that loads the React app once more.
+In development the Express server serves the react app so the server receives the "Sign in with Microsoft" request directly, but in development React forwards the 
+request to the server via a proxy. Excel complains when an add on is not served over https, so the React app had to use a self signed cert in development. 
+The server did not, the proxy fixed that.
+
+Honestly I cannot remember why I did it this why. It sounds terribly complicated in retrospect, but there was some error I struggled with for a long time and this got around it.
+
+#### 2\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/trip.PNG)](https://remblog.s3.af-south-1.amazonaws.com/trip.PNG)
+
+Whats this?:  
+Assume for demonstrative purposes that this is the list of deliveries that a user has to find a route for.
+It's a bunch of shopping centers. Let's say we deliver flowers or something.
+
+How does it work?:  
+Well, it's Excel... in this case we would like to reorder the addresses according to the shortest/fastest route and we would like to use Marco Polo to do that. 
+We need to get this data into Marco Polo for manipulation.
+
+#### 3\.
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/addresses_confirmed.PNG)](https://remblog.s3.af-south-1.amazonaws.com/addresses_confirmed.PNG)
 
@@ -192,7 +217,7 @@ How does it work?:
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/trip_builder_2.PNG)](https://remblog.s3.af-south-1.amazonaws.com/trip_builder_2.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/trip.PNG)](https://remblog.s3.af-south-1.amazonaws.com/trip.PNG)
+
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/vehicle_list.PNG)](https://remblog.s3.af-south-1.amazonaws.com/vehicle_list.PNG)
 
