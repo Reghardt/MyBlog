@@ -304,7 +304,7 @@ Don't assume I knew how to do this. I followed some smart guy's tutorial. Learne
 
 Whats this?:  
 A route has been found, the addresses in the table has been reordered according to the fastest route and that route is shown on the map.
-I would have driven it the other way around, thanks google. But that can easily be fixed by pressing the "Reverse Order" button.
+I would have prevered the route be the other way around, but that can easily be fixed by pressing the "Reverse Order" button.
 
 How does it work?:  
 
@@ -313,29 +313,47 @@ How does it work?:
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/vehicle.PNG)](https://remblog.s3.af-south-1.amazonaws.com/vehicle.PNG)
 
-Whats this?:  
-
-How does it work?:  
-
-#### 15\.
-
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/vehicle_list.PNG)](https://remblog.s3.af-south-1.amazonaws.com/vehicle_list.PNG)
-
-Whats this?:  
-
-How does it work?:  
-
-#### 16\.
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/create_vehicle.PNG)](https://remblog.s3.af-south-1.amazonaws.com/create_vehicle.PNG)
 
 Whats this?:  
+There are many types of vehicles that a company might use, this feature alows a user or company to model all their vehicles in their fleet.
+To create a vehicle requires some information, like fuel consumption and the class of vehicle.
+The class of vehicle correspons with how big it is, and how much toll fees it needs to pay.
+Class 1 might be a car and class 4 might be a big long haul truck.
+
+The app calculates fuel costs and toll costs accoridng to the given fual consumption and vehcielc class. 
+An example will be shown later.
 
 How does it work?:  
+The server creates a vehicle document and places it into an array in the workspace document. This allows vehicles to be shared between all users beloging to a workspace.
+You will note that the create vehicle dialog asks for a licence plate and vehicle name. 
+I had an additional app or module in mind that would have displayed each vehicles live location, in addition to who is driving it. 
+I figured that displying the licence plate and vehicle name would have been handy information.
+I called this module Venice. Continuing the theme of Marco Polo as he was born there.
+
 
 #### 17\.
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/cost.PNG)](https://remblog.s3.af-south-1.amazonaws.com/cost.PNG)
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/time_distance.PNG)](https://remblog.s3.af-south-1.amazonaws.com/time_distance.PNG)
+
+Whats this?:  
+Here you can see statistics of the trip based on the vehicles fuel consumption and class.
+
+How does it work?:  
+The maps API returns the distance and time of each leg so I simply ( after a lot of transformations ) used that information and combined it with the vehicle costs to get the above statistics.
+The way the cost graph is displayed might be flawed from the perspective of a logistics manager.
+For example, according to the cost graph person 5 will only be charged R2.53 for his delivey cost (assuming the company does not want to make a profit on deliveries) because
+person 4 pays the bulk of getting the vehicle on the general area of person 4 and 5.
+What would have worked better here is a distance matrix. 
+This way each delivery's cost would have been calulated in isolation witout additional deliveries (ie start -> deliver to single adddress -> return), 
+the result of this would be that person 4 and 5 pays about the same, and that no one would be subsidizing anyone elses delivery.
+
+#### 17\.
+Write back
 
 Whats this?:  
 
@@ -343,19 +361,77 @@ How does it work?:
 
 #### 18\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/time_distance.PNG)](https://remblog.s3.af-south-1.amazonaws.com/time_distance.PNG)
+Send to driver
 
 Whats this?:  
 
 How does it work?:  
 
+### Additional Features
+Toll fees
 
+Drag and drop
+
+Linked addresses
 
 
 ### Outreach
+I knew I had to go to people and show them what I have build if I wanted to make a success of the app, and oh boy did I step outside my comfort zone.
+The app was stil in its infancy when I decided to step into the office of a rather big mattress delivery company and gave them a demo.
+I was shaking, sweaty and fell all over my words, but I did it, and they were actually impressed.
+So much so that the manager set me up for a meeting with their logistics manager. 
+We had a great chat and he allowed me to install the app on the laptop of one of their logistics guys. He, just like my girlfriend also planed each route by hand, and they used excel!
+
+He was very kind and patient, I learned a lot from him and his feedback. His direct feedback substantially improved the app.
+But he never used it, and always promised he would the next time he planned routes.
+
+Was it that the app was bad? Did it lack features?
+I added a bunch of features specificly per his request, but he sugested these features every time I demoed a new version to him, not out of experience by using the app.
+
+I might be mistaken but I believe it might come down to what Tony Fadel said in his book Build: 
+People will continue using what they know even if it is inverior to something new. They will choose familiarity over betterment.
+
+Change is hard to instill.
+
+The next major meeting I had was with a big moving company, it was thanks to my girlfriend that made this possible. She is on good terms with the owner.
+Even though the meeting was fantastic and we exhnaged a many ideas, they did not realy have a need for the app in its current state.
+
+She suggested that I talk to their tracking company so it can be integrated with their services. 
+She would have likes that the planned route be shared with the tracking company, and when the truck deviates unexpectadly they can respond if needed.
+
+So I got set up with the tracking company and exchanged a few emails. 
+But they were not interested in any integration as they already had a similar app with which companies may submit their routes to.
+They sent me and the owner of the moving company a brochure on how their app works and what it does.
+Even though we were solving different problems, 
+I dare say that that I believe that my approach could have been adapted better to sove their problem.
+
+From their perspective tracking comes first (they are a tracking company after all), 
+but this creates a problem in that except for tracking they dont create an incentive 
+to use their app. Ease of use in terms of route finding and planning was an afterthought.
+
+I think the better approach would have been to create an app that has excelenet route finding and planning ababilties and add tracking to that, not the other way around.
+I admit I might be wrong and biased in my observations, but until I can see a hands on demo I will stay by my them.
+
+These were the two noteworthy events, I did a few others, bothched some but I learned a lot, and I quite enjoyed it.
+
+### Moving On
+
+I cant say im sitting on a yhach, drinking champaign and smoking a cuban sigare while writting this.
+I was not awarded with financial success but rather self betterment and expantion of my knowledge and skills.
+
+I decided to sunset this project as I was losing money on it. I was self hosting on an EC2 instance and it cost me money that I did not have. 
+I can do it for much, much cheaper today but that was all I knew back then.
+
+Exclucing expensises, the app was suffering from technical debt, I did not settle on a great arhcitecture, 
+there was spagetti dependencies everywhere and it was getting hard to change and add features.
+
+The scope has also greatly expanded beyond my abilities and time. It was not a simple route finding app anymore. 
+It had a lot of intrecate features and supporting apps, like a mobile app for drivers and the "live tracking" app Venice.
+
+I decided to move on, take everything I learned and start over.
 
 ### What I learned and used
 
-### Moving On
+
 
 ### Takeaway
