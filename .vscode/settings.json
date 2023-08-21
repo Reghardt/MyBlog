@@ -7,5 +7,6 @@
   },
   "editor.formatOnSave": true,
   "deno.unstable": true,
-  "cSpell.enableFiletypes": ["mdx"]
+  "cSpell.enableFiletypes": ["mdx"],
+  "cSpell.words": ["macguffin"]
 }
