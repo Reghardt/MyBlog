@@ -26,6 +26,140 @@ I was captivated none the less, he has sparked a quriosity that has only grown w
 
 ### Backstory
 
-### Development
+In my homewtown we have severe water shortages, not becase of a drought or a lack of water but due to corruption and mismanagament.
+The residential water supply will simply stop at random and sometimes stay off for days.
+
+To remedy this people are drilling bore holes and installing water tanks.
+My Father has one of these water tanks on a tower in his back yard:
+
+[![Water tower](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/water_stand.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/water_stand.jpg)
+
+This works great, but on occation the tank would be overfilled and waste exces water. 
+Or in contrast tanks water will be depleted if the bore hole has not been turned on for some time.
+
+There are float valves available to solve these issues. This works similar to the float in a toilet water resevoir, 
+if the water level drops below a certain point the float will turn on the bore hole to fill the tank.
+But this usualy means that the bore holes power line should visit the float valve before going to the pump itself.
+The float valve simply acts as a switch in this case that turns on the bore hole.
+
+To install a float valve the bore holes power lines has be be dug up, rerouted and burried. This can result in a considerable amount of work.
+
+I asked my father if he would be interested if I design and install a custom float valve like system myself. He said yes.
+
+### Early Development
+
+I not only wanted to be able to start and stop the bore hole pump, but I also wanted to show what the current water level in the tank is.
+I understood that there will probably have to be 3 distinct units. The sensor unit that takes water level readings.
+The control unit that displays the sensor readings and acts upon them given some parameters.
+And finally the relay unit that receives commands from the control unit to start or stop the pump.
+
+The biggest problem I faced during planning was figuring out how to measure the water level in the tank.
+
+I fist thought of making a magnet float on the waters surface and have that slide up and down a pipe with coils wraped around to detect the magnets magnetic field at set points.
+But having that scale to different sized tanks might have been dificult, aditionally it wwould not have given a great measuring resolution.
+
+The second idea was to have a flat disk float on the waters surface and to use a lazer range finder to get distance readings of of it. 
+This might have worked but lazer range finders are expensive.
+
+When searching for lazer range finders I stumbeled upon ultrasonic range finders. The last time I used one of these was with my NXT Lego kit a great many years ago.
+The idea behind an ultraosnic sensor in a water tank is that the sound waves would bounce of the waters surface as water is denser than air.
+The time taken for the sound waves to return can be used to get the distance traveled and 
+from that the water level can be calulated knowing a few other parameters like sensor height and tank depth.
+The logic checked out on the internet and I decided to take tha ultrasonic approach.
+
+The second issue was communication between the units. I figured wireless would be great and found some NRF 01 tranceivers to fit the bill.
+In case they were not suitable I decided to buy some RS485 units which communicate over wire, just to be safe.
+
+After receiving everything I had to build a proof of concept. It looked like this:
+
+//////////////////// Picture here
+
+Description here
+
+It worked quite well. The Only remaining potential issue was the possibility of 
+erronious sensor readings while the water was being pumped into the tank as the surface would be disturbed.
+
+To test this I got a large pot, mounted the ultrasonic sensor above it and poured in some water, intentionally disturbing the surface.
+There were some erronious readings, although sicnifficantly less than I expected, and nothing that cant be handled in software.
+
+The next step was to design a PCB board.
+
+I ended up with this:
+//////////////////// Picture here
+
+Here is the schematic:
+//////////////////// Picture here
+
+Nothing fancy, it is quite simple. 
+As you can see it is a single PCB, all three units reuse the same design but with different slots occupied.
+I also added a socket for the NRF 01 transceivers, if there might be a future use case in which they will be handy.
+
+I used PCBWay to manufacture the PCBs and got them around 2 weeks later.
+Here you can see some variations of the PCB:
+
+//////////////////// Picture here
+
+Descripttion
+
+This is where I stoped for about a year and a half to go finish my degree. Covid had passed and the univerity required students to return to campus.
+
+### Resuming development
+
+After finishing my route planning apps, I wanted to get back into electronics. Finishing this project was first on my todo list.
+
+
+#### 1\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_installed.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_installed.jpg)
+
+#### 2\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_testing.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_testing.jpg)
+
+#### 3\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/demo.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/demo.jpg)
+
+#### 4\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/pcbs.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/pcbs.jpg)
+
+#### 5\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/platform_building.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/platform_building.jpg)
+
+#### 6\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)
+
+#### 7\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_hole_outside.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_hole_outside.jpg)
+
+#### 8\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_mounted.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_mounted.jpg)
+
+#### 9\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_installed.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_installed.jpg)
+
+#### 10\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_testing.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_testing.jpg)
+
+#### 11\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/tank_problem.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/tank_problem.jpg)
+
+#### 12\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/testing_container.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/testing_container.jpg)
+
+
+#### 14\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/wires_found.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/wires_found.jpg)
+
 
 ### Problems
