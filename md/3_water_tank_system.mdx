@@ -72,15 +72,29 @@ In case they were not suitable I decided to buy some RS485 units which communica
 
 After receiving everything I had to build a proof of concept. It looked like this:
 
-//////////////////// Picture here
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/first_prototype_crop.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/first_prototype_crop.jpg)
 
-Description here
+The left Arduino acts as the control unit, it receives sensor readings from the right Arduino that acts as the sensor unit.
+They are connected to each other by wire (the black one under the keyboard), each using a RS485 transceiver to send or receive data over the wire.
+
+I decided to go with a wire instead of the wireless NRF transcevers as I found them to be unreliable when there are too many walls in between them, which there were many..
+
+Additionaly my Father told me there is an existing 4 wire cable from an old alarm system that was not being used anymore that stretched from where the control unit was going to be placed, to very near to the water tank.
+Very convenient.
+
+They are set up in a master slave configuration, the master being the sensor unit. In this configuration the bus (the wire) belongs to the sensor unit. This means that if a slave wants to send something it has to be granted permission by the master. In this case this is fine as the control unit does not send enything over the wire, it simply receives readings from the sensor unit every 3 seconds.
+
+The control unit does not send anything over the wire because the bore hole pump switch was conveniently right next to where the control unit was going to be installed, so I decided to make it act as both the control unit and relay unit.
+
+If there were to be 3 seperate units connected to the same bus, ie a sensor, control and relay unit, it would have been wise to make the control unit the master, this way it could request sensor reading from the sensor unit every X seconds and act upon them by sending the relay unit commands, like turning the pump on or off.
+
+I opted to make the sensor unit the slave in this case as I could not get the request/response model to work in time, but in this case it would not have mattered anyway as a seperate relay unit was not needed
 
 It worked quite well. The Only remaining potential issue was the possibility of 
 erronious sensor readings while the water was being pumped into the tank as the surface would be disturbed.
 
 To test this I got a large pot, mounted the ultrasonic sensor above it and poured in some water, intentionally disturbing the surface.
-There were some erronious readings, although sicnifficantly less than I expected, and nothing that cant be handled in software.
+There were some erronious readings, although signifficantly less than I expected, and nothing that cant be handled in software.
 
 The next step was to design a PCB board.
 
@@ -90,76 +104,79 @@ I ended up with this:
 Here is the schematic:
 //////////////////// Picture here
 
-Nothing fancy, it is quite simple. 
-As you can see it is a single PCB, all three units reuse the same design but with different slots occupied.
-I also added a socket for the NRF 01 transceivers, if there might be a future use case in which they will be handy.
+Each unit would share the same PCB design, bit with different components mounted to fulfill their different roles.
+In theory this would allow one unit to act as the sensor, control and relay unit at the same time, if required to do so.
+
+#### 1\. PCB Variations
+
+[![PCB variations](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/pcbs.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/pcbs.jpg)
 
 I used PCBWay to manufacture the PCBs and got them around 2 weeks later.
-Here you can see some variations of the PCB:
 
-//////////////////// Picture here
-
-Descripttion
-
-This is where I stoped for about a year and a half to go finish my degree. Covid had passed and the univerity required students to return to campus.
-
-### Resuming development
-
-After finishing my route planning apps, I wanted to get back into electronics. Finishing this project was first on my todo list.
+Bottom left is a blank pcb without anything solderd or attached.
+Bottom right is a control unit, it has the LCD screen attached with a keypad, RS485 unit and a relay.
+Top right is a sensor unit, it has the control board of the ultrasonic sensor attached in addition to a RS485 unit.
+Top left is an example with an NRF 01 unit attached. It was not used in this project but reserved for possible future projects using this PCB.
 
 
-#### 1\.
+#### 2\. Com and Power Cable
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_installed.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_installed.jpg)
-
-#### 2\.
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/wires_found.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/wires_found.jpg)
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_testing.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_testing.jpg)
 
-#### 3\.
-
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/demo.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/demo.jpg)
-
-#### 4\.
-
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/pcbs.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/pcbs.jpg)
-
-#### 5\.
-
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/platform_building.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/platform_building.jpg)
-
-#### 6\.
-
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)
-
-#### 7\.
-
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_hole_outside.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_hole_outside.jpg)
-
-#### 8\.
-
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_mounted.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_mounted.jpg)
-
-#### 9\.
-
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_installed.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_installed.jpg)
-
-#### 10\.
-
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_testing.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_testing.jpg)
 
-#### 11\.
+In the top photo you can see the arduino being powered by the wire connected to it. I had to climb into the roof to find this wire.
+Anyway, I attached a 9V battery to the known end in the tool shed and used a multi meter to test the wires in the roof of the house.
+After extending the wire I routed it to where the control unit was going to be.
+
+After that I attached the sensor unit to one end and the control unit to the other. I tested to see if the sensor unit can be powered through this wire in adition to using it to send sensor readings. Surprisingly it worked great.
+
+#### 3\. Tank in bad shape
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/tank_problem.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/tank_problem.jpg)
 
-#### 12\.
+Meanwhile, I climbed up the water tank and found the top to be bulged inward. How this happend I have no idea, but it wasnt good.
+It might have result in a safety hazard if that water leaks into the tank so my Father and I decided to replace it.
+
+#### 4\. Platform for new tank
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/platform_building.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/platform_building.jpg)
+
+Here my Grandfather and one of his workers was busy constructing a platform for the new tank. This one was going to be placed on the ground and use a preasure pump. It was conveniently placed right next to the tool shed where the wire exits from.
+
+#### 6\. Ultrasonic sensor
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_hole_outside.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_hole_outside.jpg)
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_mounted.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_mounted.jpg)
+
+Here the sensor has been installed in the new water tank. I attached it with some superglue and used silicone to make the hole waterproof.
+The sensor is waterproof by the way, but that water forming on the sensor due to the tanks humidity turned out to be an issue. For now my father has to clean it by hand every other day. We have discussed more permanent solutions and are working on it.
+
+#### 9\.
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/testing_container.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/testing_container.jpg)
 
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_installed.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/sensor_unit_installed.jpg)
 
-#### 14\.
+I wanted to place each unit in a neat little container so I went down to he local hardware shop and bought 2. They were perfect. Snug as a glove.
+Here you can see me test fitting and later placing the sensor unit in the tool shed after drilling some holes.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/wires_found.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/wires_found.jpg)
+#### 10\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)
+
+For the control unit I used a dremmel tool to cut out a rectange for the screen to fit in. For the keypad I cut a little slit for the membrane cable.
+
+In retrospect I should have used my Fathers CnC machine but I did not think of that..
+
+#### 12\.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_installed.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_installed.jpg)
+
+And finally, here is the control unit with its relay after installation.
 
 
 ### Problems
