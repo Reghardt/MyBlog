@@ -1,4 +1,4 @@
-export const title = "Building a water tank refill system";
+export const title = "Building a Water Tank Refill System";
 export const date = "22 Aug 2023";
 export const peek = "";
 export const published = false;
@@ -8,25 +8,25 @@ export const published = false;
 ### Intro
 When I was about 10,
 I was in my fathers study room going trough all the interesting stuff he built and collected over the years.
-He has a diploma in Electronics and build some truely amazing stuff way back when.
+He has a diploma in Electronics and build some truly amazing stuff way back when.
 
-One of his old projects he told me about was a LED bilboard that could dislay text with a bunch of different animations.
-They could slide in, roll out, be eaten by a macman or move accross the screen.
+One of his old projects he told me about was a LED billboard that could display text with a bunch of different animations.
+They could slide in, roll out, be eaten by a packman or move across the screen.
 And he only used assembly! 
 
-Naturally I askd him how these magical things worked, how do these black brics and other weird components result in something cool?
+Naturally I asked him how these magical things worked, how do these black bricks and other weird components result in something cool?
 
-He probably did not expect me to understand, and I didnt, but he toldme they communicate with a language called binary,
+He probably did not expect me to understand, and I didn't, but he told me they communicate with a language called binary,
 and that language only consists of zeroes and ones.
 
-I was awe struck, he proceded to write down 1 to 10 on a piece of paper with their corresponding binary representations.
+I was awe struck, he proceeded to write down 1 to 10 on a piece of paper with their corresponding binary representations.
 
 Even though I did not understand exactly what was being shown to me, 
-I was captivated none the less, he has sparked a quriosity that has only grown with time.
+I was captivated none the less, he has sparked a curiosity that has only grown with time.
 
 ### Backstory
 
-In my homewtown we have severe water shortages, not becase of a drought or a lack of water but due to corruption and mismanagament.
+In my hometown we have severe water shortages, not became of a drought or a lack of water but due to corruption and mismanagement.
 The residential water supply will simply stop at random and sometimes stay off for days.
 
 To remedy this people are drilling bore holes and installing water tanks.
@@ -34,15 +34,15 @@ My Father has one of these water tanks on a tower in his back yard:
 
 [![Water tower](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/water_stand.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/water_stand.jpg)
 
-This works great, but on occation the tank would be overfilled and waste exces water. 
+This works great, but on occasion the tank would be overfilled and waste excess water. 
 Or in contrast tanks water will be depleted if the bore hole has not been turned on for some time.
 
-There are float valves available to solve these issues. This works similar to the float in a toilet water resevoir, 
+There are float valves available to solve these issues. This works similar to the float in a toilet water reservoir, 
 if the water level drops below a certain point the float will turn on the bore hole to fill the tank.
-But this usualy means that the bore holes power line should visit the float valve before going to the pump itself.
+But this usually means that the bore holes power line should visit the float valve before going to the pump itself.
 The float valve simply acts as a switch in this case that turns on the bore hole.
 
-To install a float valve the bore holes power lines has be be dug up, rerouted and burried. This can result in a considerable amount of work.
+To install a float valve the bore holes power lines has be be dug up, rerouted and buried. This can result in a considerable amount of work.
 
 I asked my father if he would be interested if I design and install a custom float valve like system myself. He said yes.
 
@@ -55,19 +55,19 @@ And finally the relay unit that receives commands from the control unit to start
 
 The biggest problem I faced during planning was figuring out how to measure the water level in the tank.
 
-I fist thought of making a magnet float on the waters surface and have that slide up and down a pipe with coils wraped around to detect the magnets magnetic field at set points.
-But having that scale to different sized tanks might have been dificult, aditionally it wwould not have given a great measuring resolution.
+I fist thought of making a magnet float on the waters surface and have that slide up and down a pipe with coils warped around to detect the magnets magnetic field at set points.
+But having that scale to different sized tanks might have been difficult, additionally it would not have given a great measuring resolution.
 
-The second idea was to have a flat disk float on the waters surface and to use a lazer range finder to get distance readings of of it. 
-This might have worked but lazer range finders are expensive.
+The second idea was to have a flat disk float on the waters surface and to use a laser range finder to get distance readings of of it. 
+This might have worked but laser range finders are expensive.
 
-When searching for lazer range finders I stumbeled upon ultrasonic range finders. The last time I used one of these was with my NXT Lego kit a great many years ago.
-The idea behind an ultraosnic sensor in a water tank is that the sound waves would bounce of the waters surface as water is denser than air.
+When searching for laser range finders I stumbled upon ultrasonic range finders. The last time I used one of these was with my NXT Lego kit a great many years ago.
+The idea behind an ultrasonic sensor in a water tank is that the sound waves would bounce of the waters surface as water is denser than air.
 The time taken for the sound waves to return can be used to get the distance traveled and 
-from that the water level can be calulated knowing a few other parameters like sensor height and tank depth.
+from that the water level can be calculated knowing a few other parameters like sensor height and tank depth.
 The logic checked out on the internet and I decided to take tha ultrasonic approach.
 
-The second issue was communication between the units. I figured wireless would be great and found some NRF 01 tranceivers to fit the bill.
+The second issue was communication between the units. I figured wireless would be great and found some NRF 01 transceivers to fit the bill.
 In case they were not suitable I decided to buy some RS485 units which communicate over wire, just to be safe.
 
 After receiving everything I had to build a proof of concept. It looked like this:
@@ -77,24 +77,24 @@ After receiving everything I had to build a proof of concept. It looked like thi
 The left Arduino acts as the control unit, it receives sensor readings from the right Arduino that acts as the sensor unit.
 They are connected to each other by wire (the black one under the keyboard), each using a RS485 transceiver to send or receive data over the wire.
 
-I decided to go with a wire instead of the wireless NRF transcevers as I found them to be unreliable when there are too many walls in between them, which there were many..
+I decided to go with a wire instead of the wireless NRF transceivers as I found them to be unreliable when there are too many walls in between them, which there were many..
 
-Additionaly my Father told me there is an existing 4 wire cable from an old alarm system that was not being used anymore that stretched from where the control unit was going to be placed, to very near to the water tank.
+Additionally my Father told me there is an existing 4 wire cable from an old alarm system that was not being used anymore that stretched from where the control unit was going to be placed, to very near to the water tank.
 Very convenient.
 
 They are set up in a master slave configuration, the master being the sensor unit. In this configuration the bus (the wire) belongs to the sensor unit. This means that if a slave wants to send something it has to be granted permission by the master. In this case this is fine as the control unit does not send enything over the wire, it simply receives readings from the sensor unit every 3 seconds.
 
 The control unit does not send anything over the wire because the bore hole pump switch was conveniently right next to where the control unit was going to be installed, so I decided to make it act as both the control unit and relay unit.
 
-If there were to be 3 seperate units connected to the same bus, ie a sensor, control and relay unit, it would have been wise to make the control unit the master, this way it could request sensor reading from the sensor unit every X seconds and act upon them by sending the relay unit commands, like turning the pump on or off.
+If there were to be 3 separate units connected to the same bus, ie a sensor, control and relay unit, it would have been wise to make the control unit the master, this way it could request sensor reading from the sensor unit every X seconds and act upon them by sending the relay unit commands, like turning the pump on or off.
 
-I opted to make the sensor unit the slave in this case as I could not get the request/response model to work in time, but in this case it would not have mattered anyway as a seperate relay unit was not needed
+I opted to make the sensor unit the slave in this case as I could not get the request/response model to work in time, but in this case it would not have mattered anyway as a separate relay unit was not needed
 
 It worked quite well. The Only remaining potential issue was the possibility of 
-erronious sensor readings while the water was being pumped into the tank as the surface would be disturbed.
+erroneous sensor readings while the water was being pumped into the tank as the surface would be disturbed.
 
 To test this I got a large pot, mounted the ultrasonic sensor above it and poured in some water, intentionally disturbing the surface.
-There were some erronious readings, although signifficantly less than I expected, and nothing that cant be handled in software.
+There were some erroneous readings, although significantly less than I expected, and nothing that cant be handled in software.
 
 The next step was to design a PCB board.
 
@@ -113,7 +113,7 @@ In theory this would allow one unit to act as the sensor, control and relay unit
 
 I used PCBWay to manufacture the PCBs and got them around 2 weeks later.
 
-Bottom left is a blank pcb without anything solderd or attached.
+Bottom left is a blank pcb without anything solder or attached.
 Bottom right is a control unit, it has the LCD screen attached with a keypad, RS485 unit and a relay.
 Top right is a sensor unit, it has the control board of the ultrasonic sensor attached in addition to a RS485 unit.
 Top left is an example with an NRF 01 unit attached. It was not used in this project but reserved for possible future projects using this PCB.
@@ -131,20 +131,20 @@ In the top photo you can see the arduino being powered by the wire connected to 
 Anyway, I attached a 9V battery to the known end in the tool shed and used a multi meter to test the wires in the roof of the house.
 After extending the wire I routed it to where the control unit was going to be.
 
-After that I attached the sensor unit to one end and the control unit to the other. I tested to see if the sensor unit can be powered through this wire in adition to using it to send sensor readings. Surprisingly it worked great.
+After that I attached the sensor unit to one end and the control unit to the other. I tested to see if the sensor unit can be powered through this wire in addition to using it to send sensor readings. Surprisingly it worked great.
 
 #### 3\. Tank in bad shape
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/tank_problem.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/tank_problem.jpg)
 
-Meanwhile, I climbed up the water tank and found the top to be bulged inward. How this happend I have no idea, but it wasnt good.
+Meanwhile, I climbed up the water tank and found the top to be bulged inward. How this happened I have no idea, but it wasn't good.
 It might have result in a safety hazard if that water leaks into the tank so my Father and I decided to replace it.
 
 #### 4\. Platform for new tank
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/platform_building.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/platform_building.jpg)
 
-Here my Grandfather and one of his workers was busy constructing a platform for the new tank. This one was going to be placed on the ground and use a preasure pump. It was conveniently placed right next to the tool shed where the wire exits from.
+Here my Grandfather and one of his workers was busy constructing a platform for the new tank. This one was going to be placed on the ground and use a pressure pump. It was conveniently placed right next to the tool shed where the wire exits from.
 
 #### 6\. Ultrasonic sensor
 
@@ -168,7 +168,7 @@ Here you can see me test fitting and later placing the sensor unit in the tool s
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)
 
-For the control unit I used a dremmel tool to cut out a rectange for the screen to fit in. For the keypad I cut a little slit for the membrane cable.
+For the control unit I used a dremel tool to cut out a rectangle for the screen to fit in. For the keypad I cut a little slit for the membrane cable.
 
 In retrospect I should have used my Fathers CnC machine but I did not think of that..
 

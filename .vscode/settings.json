@@ -8,5 +8,14 @@
   "editor.formatOnSave": true,
   "deno.unstable": true,
   "cSpell.enableFiletypes": ["mdx"],
-  "cSpell.words": ["macguffin"]
+  "cSpell.words": [
+    "Fadell",
+    "Greve",
+    "macguffin",
+    "resumability",
+    "tailwindcss",
+    "Twind",
+    "wappalyzer",
+    "Zustand"
+  ]
 }

@@ -1,4 +1,4 @@
-export const title = "Tutorial: Real Tailwind with full intellisense support in Fresh JS";
+export const title = "Tutorial: Tailwind with full intellisense support in Fresh JS";
 export const date = "17 Jul 2023";
 export const peek = "";
 export const published = false;
@@ -11,7 +11,7 @@ Tailwind CSS plugins like Typography and Daisy UI can also be used with this set
 Optionally we will add Tailwind Auto Class Sorting with Prettier.
 
 ### Why:
-Fresh doesn't have a buildstep, but Tailwind CSS requires a buildstep to generate the necessary CSS from its utility classes.
+Fresh doesn't have a build step, but Tailwind CSS requires a build step to generate the necessary CSS from its utility classes.
 That is why Fresh uses Twind, a CSS in JS solution based on Tailwind that gets sent to the client and generates CSS at runtime.
 It is a bit different in syntax and currently lacks some features as compared to Tailwind. 
 That's why I decided to try use Tailwind with Fresh.
@@ -27,7 +27,7 @@ Create a new Fresh project by running:
 ~~~
 
 Give it a name.  
-Select "Yes" when it askes if you would like to use Tailwind CSS.  
+Select "Yes" when it asks if you would like to use Tailwind CSS.  
 (Even though it is actually Twind being installed). This step is to show you how to replace Twind if your project already uses it.
 
 Yes for VS code, that's the editor I am using. (This tutorial has not been tested with other editors)
@@ -60,7 +60,7 @@ Next open "main.ts" and do the following:
     await start(manifest);
 ~~~
 
-Finaly delete "twind.config.ts".
+Finally delete "twind.config.ts".
 
 
 Create a "tailwind.config.js" file in the root and copy the below into it:
@@ -89,7 +89,7 @@ Run the following command:
 
 note: update .gitignore to exclude node_modules
 
-Assuming you have the Tailwind CSS IntelliSense plugin installed you can already see the Intellisense working if you hover over a Taiwlind class in "index.tsx".
+Assuming you have the Tailwind CSS IntelliSense plugin installed you can already see the Intellisense working if you hover over a Tailwind class in "index.tsx".
 But Tailwind itself isn't working yet, we will do that next.
 
 Create a "css" folder in the "static" folder of Fresh.
@@ -139,7 +139,7 @@ Modify the start task so it looks like:
 ~~~
 
 Run your fresh Project with "deno task start".
-Tailwind should now be fully functional. Change or add a Twailwind class in "index.tsx" to see if it works.
+Tailwind should now be fully functional. Change or add a Tailwind class in "index.tsx" to see if it works.
 
 {/* If you installed the typography plugin test it by modifying "index.tsx" like so: 
 
@@ -153,7 +153,7 @@ Tailwind should now be fully functional. Change or add a Twailwind class in "ind
             <title>Fresh App</title>
         </Head>
         <div class="p-2 prose">
-            <h1>This should be realy big with prose</h1>
+            <h1>This should be really big with prose</h1>
             <p>This should have a nice space above it</p>
             <p>This should also have a nice space above it</p>
         </div>
@@ -166,7 +166,7 @@ Tailwind should now be fully functional. Change or add a Twailwind class in "ind
 ## Auto Class Sorting with Prettier
 This part is optional, unless you want to auto sort Tailwind classes with prettier.
 
-Install the VS Code Prettier Extention as well as the Prettier node module if you have not done so already in a previous step:
+Install the VS Code Prettier Extension as well as the Prettier node module if you have not done so already in a previous step:
 
 ~~~ powershell
     npm i -D prettier prettier-plugin-tailwindcss
