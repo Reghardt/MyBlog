@@ -5,4 +5,66 @@ export const published = false;
 
 # {title}
 
-Some content here
+#### Backstory
+My Girlfriend and I was planing to go on holiday, we decided to do a 8 day road trip down the Drakensburg Mountains and around Lesoto.
+Driving from Johannesburg to Harry Smith, Sani Pass, Lady Gray, Bloemfontain and back to Johannesburg.
+
+During budgeting we decided to use Marco Polo to calculate the fuel and toll costs for the trip.
+I quicly listed all the addresses in an Excel document, loaded it into Marco Polo and got back the results.
+
+Even though I wrote the app I was still surprised at the ease that it solved this budgeting problem for us.
+This was not exactly as I intended it to be used, believing that it would suite businesses better than indivuduals going on a road trip.
+But this got me thinking, the biggest problem and strength of MArco Polo is that it is a Excel Add In.
+But what if I write a more accessable mobile version, one that the average traveler would like to use?
+
+This is how the idea of ZA Route formed.
+
+
+#### Planning
+
+I did some research and found a few apps that solved this problem somewhat, but I believed I could do better.
+Each one had some sort of issue or something I did not like.
+
+It should be simple, easy to use and work on both mobile and desktop.
+
+What a cliche set of requirements, but probably one of the most dreaded sentences a developer could hear.
+
+The more grounded requirements were quite similar to the ones of Marco Polo.
+Given a list of addresses, calculate the fastest route (if neccesary).
+
+Show the route on a map, including toll gates.
+
+Show usefull statistics about the route like Distance, time, fuel and toll costs.
+
+Save and share the route.
+
+
+#### Design Decisions
+
+I entertained the thought of using Solid JS for this project, more specificaly Solid Start as I kept a close eye on that for a while.
+I love the way it uses Remote Procedure Calls to fetch and mutate data, and that it's components only execute once.
+The only issue was that it was still in Alpha.
+
+At the end of the day I decided on Next JS as I was already familiar with React. 
+My philosophy is that I will always try using some tool I am not comfortable with in each project I do, 
+this time it being Next JS.
+
+Aditionally I decided to move away from MUI and go with Tailwind only.
+I dont usually climb on hype trains like the one for tailwind a while back, but I think it was justified that time.
+I tried it and I really liked it. 
+I was sold after reading the first few chapter of Refactoring UI, written by the creators of Tailwind.
+
+Lastly I again used MongoDB, although I came to regret it later on.
+The DB is great, I like using it, and I like the query language but it is not suitable for a low trafic serverless environment (Vercel).
+Cold starts are extremely long, sometimes up to 9 seconds which is totally unexceptable.
+More on this later.
+
+#### Development
+
+
+
+
+
+
+
+

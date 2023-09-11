@@ -60,7 +60,16 @@ Imagine a settings page where you change something and then you have to hit save
 
 Additionally I added some pin sockets to easily access the ESP's pins, these being RX, TX, GPIO 0, GPIO 2, 5V, 3.3V and GND.
 
+### Sensor Prototyping
 
+I felt quite accomplished to get the ESP working this well, but I did not really have a use case for it yet.
+During my research I found that the ESP family of microcontrollers are freqiently used in IOT devices,
+so I figured I'd also build some sort of IOT device with my ESP 01.
+
+I decided on a temperature and humidity sensor as I had a sensor lying around.
+I have a old mercury thermometer in my room at my fathers house and I thought it would be nice to have something of the sort in my apartment.
+
+The first step was to build a prototype:
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/lcd_testing.jpg)](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/lcd_testing.jpg)
 
@@ -68,9 +77,38 @@ Additionally I added some pin sockets to easily access the ESP's pins, these bei
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/big_oled_with_time.jpg)](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/big_oled_with_time.jpg)
 
+I hooked up my AM2320 temperature and humidity sensor together with a 20x4 LCD to the ESP, both over I2C and wrote a simple program to see how it works.
+The ESP has 2 GPIO pins that can be configured to use I2C, this greatly expands the units capabilities as 
+this enables it to control up to 127 individual devices at once with only these two pins, assuming each device I2C device has a unique address.
+
+The LCD display was to big to my liking as I wanted to keep the sensor unit as small as possible.
+There are smaller LCD displayes but I instead purchased two OLED displays, of which I have never used before.
+One 0.91 inch display and one 1.3 inch display.
+
+These OLED displays worked well, although the 0.91 inch one was a bit small so I switched it with the bigger one.
+
+I experimented with displaying the time and date on the display in conjunction with the temeparture and humidity
+but later decided against it due to space constraints. 
+The Real Time Clock module also uses I2C.
+
+Excluding space constraints, I believed it to be better to have the unit only do one thing. 
+It does not need to display the time or date, we can get that on our phones or wall clocks already.
+In addition I think trying to display to much information is not satisfying, glancing at the display from a distance and not being able to 
+read all the information it provides makes me uneasy.
+
+It should only do what it can do well.
+
+
+### Design and Construction
+
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/pcb_top.jpg)](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/pcb_top.jpg)
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/pcb_bottom.jpg)](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/pcb_bottom.jpg)
+
+I grabed a small prototyping PCB and started spacing all the compoenents out on it. The screen to the left, the sensor in the middle and the ESP on the right,
+For power I used a micor USB plug that supplies 5V. This is steped down to 3.3V with a voltage regulator and after that 
+I placed a capacitor to ease any possible power anomalies.
+On the back You can see 2 pull up restistors that are used to make the I2C bus high as per the spec.
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/blender_internal.jpg)](https://remblog.s3.af-south-1.amazonaws.com/5_esp_01_sensor/blender_internal.jpg)
 
