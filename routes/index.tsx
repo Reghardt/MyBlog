@@ -42,7 +42,7 @@ export default function Home(
   return (
     <>
       <Head>
-        <title>Fresh App</title>
+        <title>Reghardt's Blog</title>
       </Head>
       <body>
         <div class="grid w-full justify-center">
