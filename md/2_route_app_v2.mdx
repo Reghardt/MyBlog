@@ -6,16 +6,16 @@ export const published = false;
 # {title}
 
 #### Backstory
-My Girlfriend and I was planing to go on holiday, we decided to do a 8 day road trip down the Drakensburg Mountains and around Lesoto.
-Driving from Johannesburg to Harry Smith, Sani Pass, Lady Gray, Bloemfontain and back to Johannesburg.
+My Girlfriend and I was planing to go on holiday, we decided to do a 8 day road trip down the Drakensberg Mountains and around Lesotho.
+Driving from Johannesburg to Harry Smith, Sani Pass, Lady Gray, Bloemfontein and back to Johannesburg.
 
 During budgeting we decided to use Marco Polo to calculate the fuel and toll costs for the trip.
-I quicly listed all the addresses in an Excel document, loaded it into Marco Polo and got back the results.
+I quickly listed all the addresses in an Excel document, loaded it into Marco Polo and got back the results.
 
 Even though I wrote the app I was still surprised at the ease that it solved this budgeting problem for us.
-This was not exactly as I intended it to be used, believing that it would suite businesses better than indivuduals going on a road trip.
+This was not exactly as I intended it to be used, believing that it would suite businesses better than individuals going on a road trip.
 But this got me thinking, the biggest problem and strength of MArco Polo is that it is a Excel Add In.
-But what if I write a more accessable mobile version, one that the average traveler would like to use?
+But what if I write a more accessible mobile version, one that the average traveler would like to use?
 
 This is how the idea of ZA Route formed.
 
@@ -30,18 +30,18 @@ It should be simple, easy to use and work on both mobile and desktop.
 What a cliche set of requirements, but probably one of the most dreaded sentences a developer could hear.
 
 The more grounded requirements were quite similar to the ones of Marco Polo.
-Given a list of addresses, calculate the fastest route (if neccesary).
+Given a list of addresses, calculate the fastest route (if necessary).
 
 Show the route on a map, including toll gates.
 
-Show usefull statistics about the route like Distance, time, fuel and toll costs.
+Show useful statistics about the route like Distance, time, fuel and toll costs.
 
 Save and share the route.
 
 
 #### Design Decisions
 
-I entertained the thought of using Solid JS for this project, more specificaly Solid Start as I kept a close eye on that for a while.
+I entertained the thought of using Solid JS for this project, more specifically Solid Start as I kept a close eye on that for a while.
 I love the way it uses Remote Procedure Calls to fetch and mutate data, and that it's components only execute once.
 The only issue was that it was still in Alpha.
 
@@ -49,17 +49,52 @@ At the end of the day I decided on Next JS as I was already familiar with React.
 My philosophy is that I will always try using some tool I am not comfortable with in each project I do, 
 this time it being Next JS.
 
-Aditionally I decided to move away from MUI and go with Tailwind only.
-I dont usually climb on hype trains like the one for tailwind a while back, but I think it was justified that time.
+Additionally I decided to move away from MUI and go with Tailwind only.
+I don't usually climb on hype trains like the one for tailwind a while back, but I think it was justified that time.
 I tried it and I really liked it. 
 I was sold after reading the first few chapter of Refactoring UI, written by the creators of Tailwind.
 
 Lastly I again used MongoDB, although I came to regret it later on.
-The DB is great, I like using it, and I like the query language but it is not suitable for a low trafic serverless environment (Vercel).
-Cold starts are extremely long, sometimes up to 9 seconds which is totally unexceptable.
+The DB is great, I like using it, and I like the query language but it is not suitable for a low traffic serverless environment (Vercel).
+Cold starts are extremely long, sometimes up to 9 seconds which is totally unacceptable.
 More on this later.
 
 #### Development
+
+I started with the "core" of the app, which is google maps.
+The challenge was to make it easy to interact with maps.
+There are two components to this. One is google maps, (scroll, zoom, swipe etc) and the other is the UI to interact and manipulate maps on a deeper level. 
+Either directly (specify addresses, find route, reorder addresses etc)
+or indirectly (save route, recent addresses, notes).
+The later should also display useful information about the route (fuel costs, toll costs, time, distance).
+
+At first I used the same approach I used in Marco Polo, the maps component was at the top of the page and the "manipulate/information" component was below that.
+But especially on mobile this meant that the user would have scrolled down each time they wanted to make a change and scroll back up to see the change on the map.
+
+This was bad, it should not feel like effort to see a change reflect.
+
+The solution came when using the swipe down menu on my phone: turn the manipulate/information component into an overlay with a simple toggle.
+This worked very well. Now a user can simply toggle the overlay and see what is happening on the map below.
+No scrolling, no wasted time and no losing track of the last scroll position.
+
+Next was fleshing out the manipulate/information component. This was split up into 2 parts as well. 
+The first part was where the user could list their addresses and the second was statistics about the route generated from the addresses.
+The statistics (fuel costs, toll costs, time, distance) per address was displayed in sequence in a simple table, but I did not like it as it felt to decoupled from the address list.
+For instance, if you looked at the table and wanted to delete an address you had to scroll up and delete it in die address list. 
+This meant that there was 2 copies of each address. One that is editable and one that displayed statistics.
+I decided to try and merge the manipulation and statistics parts together.
+
+Here you can see how the overlay works and how statistics are presented:
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/open_close.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/open_close.gif)
+
+#### Use Case
+
+
+
+
+
+
 
 
 
