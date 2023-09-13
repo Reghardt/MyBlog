@@ -5,7 +5,7 @@ export const published = false;
 
 # {title}
 
-#### Backstory
+### Backstory
 My Girlfriend and I was planing to go on holiday, we decided to do a 8 day road trip down the Drakensberg Mountains and around Lesotho.
 Driving from Johannesburg to Harry Smith, Sani Pass, Lady Gray, Bloemfontein and back to Johannesburg.
 
@@ -20,7 +20,7 @@ But what if I write a more accessible mobile version, one that the average trave
 This is how the idea of ZA Route formed.
 
 
-#### Planning
+### Planning
 
 I did some research and found a few apps that solved this problem somewhat, but I believed I could do better.
 Each one had some sort of issue or something I did not like.
@@ -39,7 +39,7 @@ Show useful statistics about the route like Distance, time, fuel and toll costs.
 Save and share the route.
 
 
-#### Design Decisions
+### Design Decisions
 
 I entertained the thought of using Solid JS for this project, more specifically Solid Start as I kept a close eye on that for a while.
 I love the way it uses Remote Procedure Calls to fetch and mutate data, and that it's components only execute once.
@@ -59,7 +59,7 @@ The DB is great, I like using it, and I like the query language but it is not su
 Cold starts are extremely long, sometimes up to 9 seconds which is totally unacceptable.
 More on this later.
 
-#### Development
+### Development
 
 I started with the "core" of the app, which is google maps.
 The challenge was to make it easy to interact with maps.
@@ -88,44 +88,221 @@ Here you can see how the overlay works and how statistics are presented:
 
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/open_close.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/open_close.gif)
 
-#### Use Case
+### Use Case
 
+#### 1\.
+
+[![Login Page](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/login.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/login.PNG)
+
+Whats this?: 
+This is the login page. Middleware on the server checks if a valid bearer token 
+exists on the client's request, if not, the user gets redirected here. 
+If a valid token does exist they can procede to use the app.
+
+
+How does it work?:  
+Login with google creates a bearer token using Next Auth. 
+The bearer contains the user's google ID, 
+used to identify the user for subseqent server calls.
+On first login the user is navigated to the map. 
+On subsequent logins they are navigated the "saved routes" page.
+
+#### 2\.
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/first_page.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/first_page.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/login.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/login.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/recent_addresses.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/recent_addresses.PNG)
+Whats this?:  
+This is the page a user sees on first login,
+,it's the overlay on top of the map from earlier.
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_stats.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/save_confirm.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/save_confirm.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route_stats.PNG)
+The overlay is used to manipulate google maps and to see statistics about the route.
+Taping the round button in the bottom right toggles the visibility of the overlay.
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_routes.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_routes.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_stopover_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_stopover_stats.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)
+How does it work?:  
+Note that the top right displays the number of tokens available to a user.
+Users receive 50 tokens for free when registering.
+Tokens are consumed when a user searches for an address and when routes are found.
+They can purchase additional tokens in the token store if they run out. 
+More on that later.
+
+#### 2\.
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address.PNG)
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address_on_map.PNG)
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopover_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopover_stats.PNG)
+Whats this?:  
+Here I specified the start address, which is Johannesburg.
+Note a token has been subtracted.
+It can also be seen on the map as seen in the second screenshot.
+
+How does it work?:  
+It uses the google autocomplete API,
+so a user can search for anything they are used to on google maps while also receiving suggestions.
+
+The server receives the name of the action that was completed by the user,
+like "address_solved" or "route_found". 
+It then subrtacts the associated amount of tokens from the user's tokens and sends the new amount back to the client.
+All actions consume 1 token at the moment.
+
+Once an address has been solved, 
+google returns its coordinates which is used to place a custom marker on the map.
+
+#### 3\.
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers.PNG)
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers_added.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers_added.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_1.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_1.PNG)
+
+Whats this?:  
+Here I added 4 stopovers. In the first image you can see the "Add Stopover" button
+and the number of stopovers next to that.
+Tokens have not been consumed yet in the first image, 
+as only the placeholder slots for four stopovers have been created.
+
+In the second image you can see 3 of the four stopovers and the appropriate number of tokens consumed.
+I also added some simple demo notes to the addresses.
+
+How does it work?:  
+The addresses are objects stored in an array. 
+The first and last elements are treated as the start and end addreses.
+Elements in between are treated as stopovers.
+Each stopover has controlls for swaping itself with the above or below stopover.
+A stopover cannot be swaped with a start or stop address.
+Usage of the "history" button will be shown next.
+
+
+#### 4\.
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/recent_addresses.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/recent_addresses.PNG)
+
+Whats this?:  
+This is the recent addresses. 
+It can be used to use load previously used addresses without consuming a token.
+It is open by pressing the history button, 
+the address or stopover who's history button was pressed will receive the desired address.
+Here I invoked it on the end address and selected Johannesburg.
+
+How does it work?:  
+The addresses are saved localy on the users device by using IndexedDB.
+I used the IDB backage that makes it easier to use.
+
+Addresses are listed accoring to usage.
+In this example Johannesburg will be at the top next time the popover opens.
+
+#### 5\.
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_found.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_found.PNG)
+
+Whats this?: 
+Here you can see the route generated by pressing the "Find Route" button.
+Johannesburg is both the start and end address.
+1 to 4 are the stopovers.
+The "T" icons are toll gates on the trip.
+
+How does it work?:  
+The route is generated by Google's Routes API.
+It returns the path that is displayed on the map.
+
+The app additionaly displays Tolls on the route as it has a list of all the toll gates in south Africa including their coordinates and prices.
+To check if a toll gate is on the route, the Google Maps Geometry library is used.
+It checks if a toll gate is within a given distance of a poly line.
+Each toll gate may have more than one coordinate as some have ramp plazas.
+If a toll stretches over a wide double road highway each side has a seperate cooridante as well.
+At first I only placed one coordinate in between the roads and relaxed the margins of the Geometry library,
+but this caused issues as sometimes the library might mistake a ramp as being on the route as well.
+So I opted for very tight tolerances and mutliple coordinates to eliminate errors.
+
+All the markers are custom made React components placed there with a Portal.
+
+#### 6\.
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopover_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopover_stats.PNG)
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_stats.PNG)
+
+Whats this?:  
+After thr route has been generated, statistics about the route is shown.
+Statistics about the whole route and address to address statistics.
+
+How does it work?:  
+The route is seperated into legs, the distance and duration of each leg is used to display inter address statistics.
+To get the tolls, you can think of it as a imaginary box that is drawn around each leg.
+A search is then done to see which tolls fall into the box.
+Those filtered tolls are then tested to see if they are on the path of the leg.
+I did not test to see if there is a performance improvement, so this might be a case of premature optimisation.
+
+
+#### 6\.
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/trip_name.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/trip_name.PNG)
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/save_confirm.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/save_confirm.PNG)
+
+Whats this?: 
+After a route has been found for the given addresses, 
+it is possible to save the route for later use.
+In the top image a name is given to the route, with a short note.
+
+In the bottom image the app asks for conformation.
+The tabs will be explained later.
+
+How does it work?:  
+The app saves the route on MongoDB, giving it a unique ID that can be used to retreive it.
+
+#### 7\.
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route.PNG)
+
+Whats this?:  
+Here you can see the saved route. 
+It looks similar to the former steps but here the route is not ment to be edited, 
+but instead used for navigation.
+
+
+If the need arises to edit the route this can be done by clicking on "Edit Route".
+If it is the owner of the route the original route will be edited.
+If the route was shared with someone via whatsapp, 
+a copy of the route with a new ID will be created and edited which can then be saved.
+
+If the owner of route sends the route to a delivery driver, 
+and edits the route at a later date, the edit will be reflected on the drivers phone as the ID stays the same. 
+
+How does it work?:  
+The route is saved to the DB and given an unique ID. The route document contains the ID of its owner.
+At the moment anyone with the route ID can open the route, which can lead to privacy issues.
+A autorize feature will be added later.
+
+#### 8\.
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_stopover_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_stopover_stats.PNG)
+
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route_stats.PNG)
+Whats this?:  
+Here you can see the body of the saved route.
+It lookes similar to the when it was being edited.
+Clicking on the "road sign" buttons opens google map with the corisponding address loaded as the destination.
+
+How does it work?: 
+It opens Google Maps on any device by using a Maps URL, which is a universal cross platform URL to launch Google Maps.
+
+
+#### 9\.
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_routes.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_routes.PNG)
+
+
+
+
+
+
+{/* [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_1.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_1.PNG) */}
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_1_route.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_1_route.PNG)
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_1_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_1_stats.PNG)
 
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2.PNG)
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_route.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_route.PNG)
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_stats.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/trip_name.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/trip_name.PNG)
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)
+
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)
 
 
 
-
-
-
-
-
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)
 
 
 
