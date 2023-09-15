@@ -55,6 +55,8 @@ for await (const dirEntry of Deno.readDir("md")) {
   }
 }
 
+articleDetails.sort((a, b) => a.fileName.localeCompare(b.fileName)); //sort articles based on file name
+
 // console.log(JSON.stringify(articleDetails));
 
 await Deno.writeTextFile(
