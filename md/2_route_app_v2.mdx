@@ -293,7 +293,7 @@ Not much to explain really, some simple DB manipulations and queries.
 
 ### Additional Features
 
-#### 1\. Tabs
+#### A1\. Tabs
 
 My father and I went on holiday to Sodwana for a week at the start of the year.
 We could drive from Louis Trichardt to Sodwana directly or sleep over in Hoedspruit.
@@ -312,19 +312,86 @@ This is how they work:
 
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_options.png)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_options.png)
 
+Tab 1 already contains the direct route from Louis Trichardt to Sodwana,
+switching to tab 2, presents us with the ability to copy Tab 1's route into tab 2, or create a new route. 
+Copying routes saves time and eliminates repetition, as the routes being compared will probably at least share the same start and end address.
+
+In tab 2 I added a Hoedspruit as a stopover and pressed find route:
 
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_route.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_route.gif)
+
+Here you can see the route on the map change when switching between tab 1 and 2, making it very easy to see how routes differ.
+The same with statistics:
+
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_stats.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_stats.gif)
+
+As you can see there is not much of a difference between the two routes, so we decided to drive the direct route.
+Boy were we in for a long trip.. my father, sister, myself and camping equipment in a small Suzuki Jimny..
+It was something.
+
+My father said he was cured of camping after this trip... but it was a fun adventure.
+
+#### A2\. Fastest Route
+
+#### A3\. Payment - PayFast
+
+Users spend tokens when solving addresses and finding routes. When reaching 0 they need to purchase more to complete these actions.
+They can do so on the Token shop.
 
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)
 
+On selecting the desired amount of tokens the user is navigated to PayFast to complete the transaction.
 
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)
 
-
+If the user was busy creating a route and spent tokens on that route, they are able to return to that route and resume editing it:
 
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)
 
+
+### Advertising
+
+[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/google_ads.jpg)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/google_ads.jpg)
+
+The click through rate comes down to just over 6%, which by most sources suggest is better than the average click through rate of 3-5%.
+I believe this indicates that the adds I submitted were successfully targeting their intended group of people.
+
+As per the screenshot it is evident that most people use the app to calculate toll fees, which is a welcome use case as it is one of the selling features of the app.
+"road trip planner" is also a welcome search term, as a road trip inspired the app.
+
+There was a few surprising search terms that I did not expect, like "multiple delivery route planner" and "optimize route".
+Both which can be handled perfectly well by ZA Route, but I did not really gear the add campaign to sell those features.
+This indicates it might be a good idea to have an add campaign specifically target similar users in the future.
+
+From the 754 people that clicked on an add, about 90 signed in with their google account. 
+Of the 90, 41 spent at least one token in the app.
+The greatest amount of tokens spent at this time by a single user is 38 of their free 50 tokens.
+This specific user is a returning user that recently used the app at the time of writing.
+
+The reason I put the add campaign on pause was due to performance issues related to the database and a few bugs that arose.
+But, I am happy with how it performed and for everything I learned due to it.
+
+### Regrets and Improvements
+
+I regret using mongoDB, not because it is a bad database, I quite like using it, although there are always a few "buts".
+The biggest issue I have with it is its serverless performance.
+While working on Marco Polo I had a dedicated server that maintained a connection with my MongoDB cluster(a free 500mb shared cluster), and the performance was fantastic.
+Never had an issue.
+Queries were always near instant, but I noticed a severe performance impact, especially on cold starts when using mongoDB on Vercel.
+Establishing a connection and then waiting for a query to return sometimes took up to 9 seconds, 
+much much more than what is needed for a user to leave the site out of frustration or boredom.
+
+A snappy site creates a sense of ease and professionalism in the end user, a slow site the opposite.
+
+These long delays persisted even after a connection was established and cached according to a template from Vercel, meaning the user had to face numerous potential
+long delays before routes were saved logging in.
+
+I tested cold start performance on both the free cluster and on their paid serverless platform, both results were about the same.
+So for now I decided to put the project on hold and migrate to Postgres in combination with PostgREST to improve performance. More on that in a future article.
+
+Another improvement would be improving the landing page. I think it needs a rework, it might just improve the number of sign ups significantly.
+
+### Takeaway
 
 
 
