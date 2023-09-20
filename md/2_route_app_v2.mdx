@@ -7,125 +7,129 @@ export const published = false;
 
 ### Backstory
 My Girlfriend and I was planing to go on holiday, we decided to do a 8 day road trip down the Drakensberg Mountains and around Lesotho.
-Driving from Johannesburg to Harry Smith, Sani Pass, Lady Gray, Bloemfontein and back to Johannesburg.
+Driving from Johannesburg to Harry Smith, Sani Pass, Lady Gray, Bloemfontein, then back to Johannesburg.
 
-During budgeting we decided to use Marco Polo to calculate the fuel and toll costs for the trip.
+During budgeting we decided to use [Marco Polo](/article/building-a-delivery-route-optimization-app-version-1) to calculate the fuel and toll costs for the trip.
 I quickly listed all the addresses in an Excel document, loaded it into Marco Polo and got back the results.
 
 Even though I wrote the app I was still surprised at the ease that it solved this budgeting problem for us.
-This was not exactly as I intended it to be used, believing that it would suite businesses better than individuals going on a road trip.
-But this got me thinking, the biggest problem and strength of MArco Polo is that it is a Excel Add In.
+This was not exactly the way I intended it to be used, believing that it would be best suited for businesses doing deliveries than individuals going on a road trip.
+But this got me thinking, the biggest problem and strength of Marco Polo was that it's a Excel Add In.
 But what if I write a more accessible mobile version, one that the average traveler would like to use?
 
-This is how the idea of ZA Route formed.
+This is how the idea of ZA Route was formed.
 
 
 ### Planning
 
-I did some research and found a few apps that solved this problem somewhat, but I believed I could do better.
-Each one had some sort of issue or something I did not like.
+I did some research and found a few apps that solved this problem somewhat, 
+but each one had some sort of issue or something I did not like.
+I believed I could do better.
 
 It should be simple, easy to use and work on both mobile and desktop.
 
-What a cliche set of requirements, but probably one of the most dreaded sentences a developer could hear.
+What a cliche set of requirements, but probably one of the most dreaded sentences a developer could hear... simple... easy... mobile... desktop...
 
-The more grounded requirements were quite similar to the ones of Marco Polo.
-Given a list of addresses, calculate the fastest route (if necessary).
-
-Show the route on a map, including toll gates.
-
-Show useful statistics about the route like Distance, time, fuel and toll costs.
-
-Save and share the route.
+The more *grounded* requirements were quite similar to the ones of Marco Polo:  
+1\. Given a list of addresses, calculate the fastest route (if necessary).  
+2\. Show the route on a map, including toll gates.  
+3\. Show useful statistics about the route like distance, time, fuel and toll costs.  
+4\. Save, drive and share the route.
 
 
 ### Design Decisions
 
 I entertained the thought of using Solid JS for this project, more specifically Solid Start as I kept a close eye on that for a while.
-I love the way it uses Remote Procedure Calls to fetch and mutate data, and that it's components only execute once.
-The only issue was that it was still in Alpha.
+I love the way it uses Remote Procedure Calls to fetch and mutate data, and that its components only execute once.
+The only issue was that it was still in Beta.
 
 At the end of the day I decided on Next JS as I was already familiar with React. 
 My philosophy is that I will always try using some tool I am not comfortable with in each project I do, 
-this time it being Next JS.
+Next JS was different enough to fit the bill.
 
-Additionally I decided to move away from MUI and go with Tailwind only.
+Additionally I decided to move away from MUI and go with Tailwind only (mostly).
 I don't usually climb on hype trains like the one for tailwind a while back, but I think it was justified that time.
 I tried it and I really liked it. 
 I was sold after reading the first few chapter of Refactoring UI, written by the creators of Tailwind.
 
-Lastly I again used MongoDB, although I came to regret it later on.
-The DB is great, I like using it, and I like the query language but it is not suitable for a low traffic serverless environment (Vercel).
-Cold starts are extremely long, sometimes up to 9 seconds which is totally unacceptable.
+Lastly I again used MongoDB like with Marco Polo, although I came to regret it.
 More on this later.
 
 ### Development
 
-I started with the "core" of the app, which is google maps.
-The challenge was to make it easy to interact with maps.
-There are two components to this. One is google maps, (scroll, zoom, swipe etc) and the other is the UI to interact and manipulate maps on a deeper level. 
+I started with the "core" of the app, which is Google Maps.
+The challenge was to make it easy to interact with Maps.
+There are two components to this. One is google maps, (scroll, zoom, swipe etc) and the other is the UI to interact and manipulate Maps on a deeper level. 
 Either directly (specify addresses, find route, reorder addresses etc)
 or indirectly (save route, recent addresses, notes).
 The later should also display useful information about the route (fuel costs, toll costs, time, distance).
 
 At first I used the same approach I used in Marco Polo, the maps component was at the top of the page and the "manipulate/information" component was below that.
-But especially on mobile this meant that the user would have scrolled down each time they wanted to make a change and scroll back up to see the change on the map.
+But especially on mobile, this meant that the user would have scrolled down each time they wanted to make a change and scroll back up to see the change reflected on the map.
 
 This was bad, it should not feel like effort to see a change reflect.
 
-The solution came when using the swipe down menu on my phone: turn the manipulate/information component into an overlay with a simple toggle.
+The solution came one day when using the swipe down menu on my phone: turn the manipulate/information component into an overlay with a simple toggle.
 This worked very well. Now a user can simply toggle the overlay and see what is happening on the map below.
 No scrolling, no wasted time and no losing track of the last scroll position.
 
 Next was fleshing out the manipulate/information component. This was split up into 2 parts as well. 
 The first part was where the user could list their addresses and the second was statistics about the route generated from the addresses.
 The statistics (fuel costs, toll costs, time, distance) per address was displayed in sequence in a simple table, but I did not like it as it felt to decoupled from the address list.
-For instance, if you looked at the table and wanted to delete an address you had to scroll up and delete it in die address list. 
+For instance, if you looked at the table and wanted to delete an address you had to scroll up and delete it in the address list. 
 This meant that there was 2 copies of each address. One that is editable and one that displayed statistics.
 I decided to try and merge the manipulation and statistics parts together.
 
-Here you can see how the overlay works and how statistics are presented:
+Here you can see how the overlay works and the result of the merge:
 
 [![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/open_close.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/open_close.gif)
 
+Note that there is a "Start Address" and "End Address" component that is editable.
+The statistics are displayed in between. The arrow clearly indicates that the statistics are the result of the travel between the start and end addresses.
+
+
 ### Use Case
+
+I will now present a common use case that a user might use the app for.
 
 #### 1\.
 
 [![Login Page](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/login.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/login.PNG)
 
-Whats this?: 
-This is the login page. Middleware on the server checks if a valid bearer token 
-exists on the client's request, if not, the user gets redirected here. 
+Whats this?:  
+This is the login and showcase page. 
+Features of the shown to the user when scrolling down.
+
+
+
+How does it work?:   
+Middleware on the server checks if a valid bearer token 
+exists on the client's request when navigating to any page of the app, if not, the user gets redirected here. 
 If a valid token does exist they can proceed to use the app.
 
-
-How does it work?:  
-Login with google creates a bearer token using Next Auth. 
+Login with google creates the bearer token using Next Auth. 
 The bearer contains the user's google ID, 
 used to identify the user for subsequent server calls.
-On first login the user is navigated to the map. 
-On subsequent logins they are navigated the "saved routes" page.
 
 #### 2\.
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/first_page.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/first_page.PNG)
+[![Post Login Page](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/first_page.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/first_page.PNG)
 Whats this?:  
 This is the page a user sees on first login,
-,it's the overlay on top of the map from earlier.
+it's the overlay on top of the map written about from earlier.
 
 The overlay is used to manipulate google maps and to see statistics about the route.
 Taping the round button in the bottom right toggles the visibility of the overlay.
 
 How does it work?:  
 Note that the top right displays the number of tokens available to a user.
-Users receive 50 tokens for free when registering.
+New users receive 50 tokens for free when registering.
 Tokens are consumed when a user searches for an address and when routes are found.
 They can purchase additional tokens in the token store if they run out. 
 More on that later.
 
 #### 2\.
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address_on_map.PNG)
+[![Start Address](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address.PNG)
+[![Start Address on Map](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/start_address_on_map.PNG)
 
 Whats this?:  
 Here I specified the start address, which is Johannesburg.
@@ -142,11 +146,11 @@ It then subtracts the associated amount of tokens from the user's tokens and sen
 All actions consume 1 token at the moment.
 
 Once an address has been solved, 
-google returns its coordinates which is used to place a custom marker on the map.
+Google returns it's coordinates which is used to place a custom marker on the map.
 
 #### 3\.
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers.PNG)
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers_added.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers_added.PNG)
+[![Stopovers](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers.PNG)
+[![Stopovers Added](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers_added.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopovers_added.PNG)
 
 Whats this?:  
 Here I added 4 stopovers. In the first image you can see the "Add Stopover" button
@@ -168,12 +172,12 @@ Usage of the "history" button will be shown next.
 
 #### 4\.
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/recent_addresses.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/recent_addresses.PNG)
+[![History Button](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/recent_addresses.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/recent_addresses.PNG)
 
 Whats this?:  
 This is the recent addresses. 
-It can be used to use load previously used addresses without consuming a token.
-It is open by pressing the history button, 
+It can be used to load previously used addresses without consuming a token.
+It is opened by pressing the history button, 
 the address or stopover who's history button was pressed will receive the desired address.
 Here I invoked it on the end address and selected Johannesburg.
 
@@ -185,9 +189,9 @@ Addresses are listed according to usage.
 In this example Johannesburg will be at the top next time the popover opens.
 
 #### 5\.
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_found.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_found.PNG)
+[![Route Found](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_found.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_found.PNG)
 
-Whats this?: 
+Whats this?:  
 Here you can see the route generated by pressing the "Find Route" button.
 Johannesburg is both the start and end address.
 1 to 4 are the stopovers.
@@ -203,19 +207,18 @@ It checks if a toll gate is within a given distance of a poly line.
 Each toll gate may have more than one coordinate as some have ramp plazas.
 If a toll stretches over a wide double road highway each side has a separate coordinate as well.
 At first I only placed one coordinate in between the roads and relaxed the margins of the Geometry library,
-but this caused issues as sometimes the library might mistake a ramp as being on the route as well.
+but this caused issues as sometimes the library might mistake a close by ramp as being on the route as well.
 So I opted for very tight tolerances and multiple coordinates to eliminate errors.
 
-All the markers are custom made React components placed there with a Portal.
+All the markers are custom made React components placed there with a React Portal.
 
 #### 6\.
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopover_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopover_stats.PNG)
+[![Stopover Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopover_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/stopover_stats.PNG)
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_stats.PNG)
+[![Route Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/route_stats.PNG)
 
 Whats this?:  
-After thr route has been generated, statistics about the route is shown.
-Statistics about the whole route and address to address statistics.
+After the route has been generated, statistics about the route is shown, both for between address and for the whole route.
 
 How does it work?:  
 The route is separated into legs, the distance and duration of each leg is used to display inter address statistics.
@@ -226,37 +229,37 @@ I did not test to see if there is a performance improvement, so this might be a 
 
 
 #### 6\.
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/trip_name.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/trip_name.PNG)
+[![Trip Name](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/trip_name.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/trip_name.PNG)
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/save_confirm.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/save_confirm.PNG)
+[![Confirm Save](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/save_confirm.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/save_confirm.PNG)
 
-Whats this?: 
+Whats this?:  
 After a route has been found for the given addresses, 
 it is possible to save the route for later use.
 In the top image a name is given to the route, with a short note.
 
-In the bottom image the app asks for conformation.
+In the bottom image the app asks for confirmation.
 The tabs will be explained later.
 
 How does it work?:  
 The app saves the route on MongoDB, giving it a unique ID that can be used to retrieve it.
+The route belongs to the user who created it.
 
 #### 7\.
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route.PNG)
+[![Saved Route](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route.PNG)
 
-Whats this?:  
+Whats this?:   
 Here you can see the saved route. 
-It looks similar to the former steps but here the route is not meant to be edited, 
+It visually looks similar to the previous images but here the route is not meant to be edited, 
 but instead used for navigation.
 
-
 If the need arises to edit the route this can be done by clicking on "Edit Route".
-If it is the owner of the route the original route will be edited.
-If the route was shared with someone via whatsapp, 
+If it is the owner of the route, the original route will be edited.
+If the route was shared with someone via Whatsapp, 
 a copy of the route with a new ID will be created and edited which can then be saved.
 
-If the owner of route sends the route to a delivery driver, 
+If the owner of a route sends the route to a delivery driver, 
 and edits the route at a later date, the edit will be reflected on the drivers phone as the ID stays the same. 
 
 How does it work?:  
@@ -264,31 +267,32 @@ The route is saved to the DB and given an unique ID. The route document contains
 At the moment anyone with the route ID can open the route, which can lead to privacy issues.
 A authorize feature will be added later.
 
+More in the next example.
+
 #### 8\.
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_stopover_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_stopover_stats.PNG)
+[![Saved Stopover Stats](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_stopover_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_stopover_stats.PNG)
 
-
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route_stats.PNG)
+[![Saved Route Stats](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route_stats.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_route_stats.PNG)
 Whats this?:  
 Here you can see the body of the saved route.
-It looks similar to the when it was being edited.
-Clicking on the "road sign" buttons opens google map with the corresponding address loaded as the destination.
+Clicking on the "road sign arrow" button opens up Google Map with the corresponding address loaded as the destination.
 
 How does it work?: 
-It opens Google Maps on any device by using a Maps URL, which is a universal cross platform URL to launch Google Maps.
+It opens Google Maps on any device by using a [Maps URL](https://developers.google.com/maps/documentation/urls/get-started), which is a universal cross platform URL to launch Google Maps.
+If the device has Google Maps installed, it will open that. If not, Googl Maps will be loaded in the browser.
 
 
 #### 9\.
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_routes.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_routes.PNG)
+[![Saved Routes](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_routes.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/saved_routes.PNG)
 
 Whats this?: 
-This is the app's menu. From here new routes can be created or saved routes can be opened and viewed like in the pervious images.
+This is the app's menu. From here new routes can be created, or saved routes can be opened and viewed like in the pervious two images.
 The drop down at the top can switch between "Personal" and "Business", although business is grayed out at the moment.
 Business will allow all people belonging to that business to use the same token pool.
 
-How does it work?: 
-Not much to explain really, some simple DB manipulations and queries.
+How does it work?:  
+A query is made that returns all ID's of routes belonging to the current user.
 
 
 ### Additional Features
@@ -301,16 +305,16 @@ We could drive from Louis Trichardt to Sodwana directly or sleep over in Hoedspr
 We wanted to know which option would be best.
 
 At that time I already had a basic version of ZA Route working so I opened it and checked the statistics on the direct route.
-I then added a stopover in Hoedspruit to see how that compares, wiping out the statistics of the direct route.
+I then added a stopover in Hoedspruit to see how that compares, overwriting the statistics of the direct route.
 
 It immediately became apparent that this might be a common use case, 
-but one that my app cant handle properly as this was not an efficient way to compare alternative routes.
+but one that my app can't handle properly as this was not an efficient way to compare alternative routes.
 
-Thats when I got the idea of implementing route tabs, to easily and efficiently switch between and compare alternate routes.
+Thats when I got the idea of implementing "route tabs", to easily and efficiently switch between and compare alternate routes.
 
 This is how they work:
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_options.png)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_options.png)
+[![Tab 2 Options](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_options.png)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tab_2_options.png)
 
 Tab 1 already contains the direct route from Louis Trichardt to Sodwana,
 switching to tab 2, presents us with the ability to copy Tab 1's route into tab 2, or create a new route. 
@@ -318,12 +322,12 @@ Copying routes saves time and eliminates repetition, as the routes being compare
 
 In tab 2 I added a Hoedspruit as a stopover and pressed find route:
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_route.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_route.gif)
+[![Switching Tabs](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_route.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_route.gif)
 
 Here you can see the route on the map change when switching between tab 1 and 2, making it very easy to see how routes differ.
 The same with statistics:
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_stats.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_stats.gif)
+[![Switching Tab Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_stats.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/tabs_stats.gif)
 
 As you can see there is not much of a difference between the two routes, so we decided to drive the direct route.
 Boy were we in for a long trip.. my father, sister, myself and camping equipment in a small Suzuki Jimny..
@@ -333,31 +337,41 @@ My father said he was cured of camping after this trip... but it was a fun adven
 
 #### A2\. Fastest Route
 
+[![Optimize](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/optimize.gif)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/optimize.gif)
+
+Here you can see the effect of the "Fastest Route" checkbox.
+Turning it on reorders the stopovers and saves 30 minutes in total for this theoretical delivery.
+
+(This is how the app appears on desktop)
+
 #### A3\. Payment - PayFast
 
 Users spend tokens when solving addresses and finding routes. When reaching 0 they need to purchase more to complete these actions.
-They can do so on the Token shop.
+They can do so on the Token Shop.
+It is opened automatically when reaching 0 tokens, or manually by pressing the "Piggy Bank" Icon at the top right.
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)
+[![Shop](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/shop.PNG)
 
 On selecting the desired amount of tokens the user is navigated to PayFast to complete the transaction.
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)
+[![PayFast](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/payfast.PNG)
 
 If the user was busy creating a route and spent tokens on that route, they are able to return to that route and resume editing it:
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)
+[![OResume Editing](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/resume_editing.PNG)
 
 
 ### Advertising
 
-[![Overlay and Statistics](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/google_ads.jpg)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/google_ads.jpg)
+[![Advertising Campaign](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/google_ads.jpg)](https://remblog.s3.af-south-1.amazonaws.com/2_route_app_v2/google_ads.jpg)
 
-The click through rate comes down to just over 6%, which by most sources suggest is better than the average click through rate of 3-5%.
-I believe this indicates that the adds I submitted were successfully targeting their intended group of people.
+Here you can see an overview of the Google Ads Advertising Campaign.
+
+The click through rate (754 / 12K) comes down to just over 6%, which by most sources suggest is better than the average click through rate of 3-5%.
+I believe this indicates that the adds I created were successfully targeting their intended audience.
 
 As per the screenshot it is evident that most people use the app to calculate toll fees, which is a welcome use case as it is one of the selling features of the app.
-"road trip planner" is also a welcome search term, as a road trip inspired the app.
+"road trip planner" is also a welcome search term, as our road trip inspired the app.
 
 There was a few surprising search terms that I did not expect, like "multiple delivery route planner" and "optimize route".
 Both which can be handled perfectly well by ZA Route, but I did not really gear the add campaign to sell those features.
@@ -373,26 +387,81 @@ But, I am happy with how it performed and for everything I learned due to it.
 
 ### Regrets and Improvements
 
-I regret using mongoDB, not because it is a bad database, I quite like using it, although there are always a few "buts".
-The biggest issue I have with it is its serverless performance.
-While working on Marco Polo I had a dedicated server that maintained a connection with my MongoDB cluster(a free 500mb shared cluster), and the performance was fantastic.
-Never had an issue.
-Queries were always near instant, but I noticed a severe performance impact, especially on cold starts when using mongoDB on Vercel.
-Establishing a connection and then waiting for a query to return sometimes took up to 9 seconds, 
-much much more than what is needed for a user to leave the site out of frustration or boredom.
+#### MongoDB
+
+I really like MongoDB. I think it has a very powerful and flexible query language, especially with its aggregation pipeline.
+I initially chose mongoDB because it is very accessible.
+You can get a free cluster with 500mb running in under 3 minutes. This was very appealing especially since such a cluster can be 
+created here in south africa. Very few database as a service providers provide reasonably priced databases here, if at all.
+
+But that locality gets totally negated once MongoDB gets accessed from a serverless environment.
+Cold starts took upwards of 7 second, which is way longer than the average user is willing to wait.
 
 A snappy site creates a sense of ease and professionalism in the end user, a slow site the opposite.
 
-These long delays persisted even after a connection was established and cached according to a template from Vercel, meaning the user had to face numerous potential
-long delays before routes were saved logging in.
+I tested cold starts on the shared cluster and on their paid serverless service, but the results were about the same.
+This was using a template provided by Vercel that caches the connection for future use.
+But still, there was a noticeable delay each time a query was made, even with a cached connection.
 
-I tested cold start performance on both the free cluster and on their paid serverless platform, both results were about the same.
-So for now I decided to put the project on hold and migrate to Postgres in combination with PostgREST to improve performance. More on that in a future article.
+So for now I decided to put the project on hold and migrate to Postgres in combination with PostgREST to improve performance. 
+More on that in a future article.
 
-Another improvement would be improving the landing page. I think it needs a rework, it might just improve the number of sign ups significantly.
+#### Landing Page
+People are quick to judge a site based on appearance and less so on content or functionality.
+I know this because I do..
+Saying this, I think the landing page needs a rework.
+If people are impressed with the landing page it might just cause them to stick around longer and sign up to use the app.
+
+
+#### Documentation
+I recently started picking apart Adafruit's Arduino OLED display driver to dive a bit deeper into C++ and I2C.
+What struck me was how well the library was documented.
+C++ has a built in (I presume) documentation system similar to JSDoc with which a developer can briefly describe what a function does,
+and what the purpose of each parameter and returns statement is.
+
+I liked this a lot and came to realize the importance of good documentation 
+and how much it helps not only others but the author in understanding what the code does.
+
+Thus, my future projects will have great effort put into documentation as it is so beneficial.
+
+#### Unit Tests
+Units tests are a fairly divisive topic to put it lightly.
+Opinions on them ranging from heavenly gift to hell spawn.
+
+I did not write any unit tests for ZA Route as I was firmly in the "dislike it" camp, 
+but I am starting to see the potential benefit of having them.
+
+I made many changes that effected components or functions downstream, I believe units tests may assist in fixing such breakages.
+Further investigation is required.
 
 ### Takeaway
 
+With the previous version of the app, Marco Polo, I kept expanding the scope,
+mostly ignoring the requirements I listed at the start of the project.
+
+In that project, in addition to the main app, 
+I started working on a separate "control center" app that was going to display a live map of current deliveries,
+and a mobile app that was going to track the driver.
+Until one day I realized it's going to take forever to finish everything, 
+and that most of these features wont be needed, at least at first.
+
+In response, with this project I decided to focus on what mattered and wat was actually needed of the app.
+It should do a few things and do them well.
+
+In the end I feel like I designed a rather elegant app, maybe not in looks but in functionality.
+The app can be used mainly to create routes, presenting the user with useful information,
+but that route can also be saved and used in Google Maps. 
+The saved route can then be share with other over whatsapp, who can then also use it in Maps.
+
+It solves a real world problem without being bloated or doing more that is needed of it.
+
+[K.I.S.S.](https://en.wikipedia.org/wiki/KISS_principle)
+
+I enjoyed this project, and I am looking forward to writing more on my experiences once I improved it.
+
+### Try it out
+
+[https://www.zaroute.co.za/](https://www.zaroute.co.za/)
 
 
 
