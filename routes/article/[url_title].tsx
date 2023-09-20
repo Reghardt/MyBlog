@@ -106,20 +106,24 @@ export default async function MarkdownPage(req: Request, ctx: RouteContext) {
     const evaluatedArticle = await evaluateArticle(articleContent);
 
     return (
-      <>
-        <Head>
-          <title>{}</title>
-        </Head>
-
-        <main>
-          <div class={"grid justify-center p-2"}>
-            <div class={"prose w-full"}>{evaluatedArticle.default({})}</div>
-            <div class={"mb-10 mt-6 flex justify-end"}>
-              <LikeArticle url_title={url_title} />
-            </div>
+      <div
+        class={
+          "relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50  md:py-8 lg:py-12"
+        }
+      >
+        <div
+          class={
+            "relative w-full bg-white px-6 py-12 shadow-xl shadow-slate-700/10 ring-1 ring-gray-900/5 md:mx-auto md:max-w-3xl lg:max-w-4xl lg:pb-28 lg:pt-16"
+          }
+        >
+          <div class={"prose prose-slate mx-auto mt-8 lg:prose-lg"}>
+            {evaluatedArticle.default({})}
           </div>
-        </main>
-      </>
+          <div class={" prose mx-auto mt-8 flex justify-end lg:prose-lg"}>
+            <LikeArticle url_title={url_title} />
+          </div>
+        </div>
+      </div>
     );
   } catch (e) {
     console.log(e);
