@@ -49,25 +49,31 @@ export default function Home(
           <div class="prose w-full p-4">
             <div class={"grid grid-cols-1 gap-4"}>
               {props.data.articles.reverse().map((article) => {
-                return (
-                  <a class={"no-underline"} href={`/article/${article.url}`}>
-                    <div class={" rounded bg-gray-100 p-2 hover:bg-gray-200"}>
-                      <h2 class={"my-6"}>
-                        <div>{article.title}</div>
-                      </h2>
-                      <div class="flex w-full justify-between">
-                        <div>{new Date(article.date).toLocaleDateString()}</div>
+                if (article.published) {
+                  return (
+                    <a class={"no-underline"} href={`/article/${article.url}`}>
+                      <div class={" rounded bg-gray-100 p-2 hover:bg-gray-200"}>
+                        <h2 class={"my-6"}>
+                          <div>{article.title}</div>
+                        </h2>
+                        <div class="flex w-full justify-between">
+                          <div>
+                            {new Date(article.date).toLocaleDateString()}
+                          </div>
 
-                        <div class={"w-full"}></div>
+                          <div class={"w-full"}></div>
 
-                        <div class={"flex items-center justify-end gap-2"}>
-                          <div>{article.views}</div>
-                          <IconEye />
+                          <div class={"flex items-center justify-end gap-2"}>
+                            <div>{article.views}</div>
+                            <IconEye />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </a>
-                );
+                    </a>
+                  );
+                } else {
+                  return <></>;
+                }
               })}
             </div>
           </div>
