@@ -42,19 +42,45 @@ I would urge anyone to give it a shot and make up their own mind about it.
 
 But moving on to the display driver for now.
 
-Like any other "platform", a driver is required to communicate with peripherals.
+I have a small SH1106 OLED display that I wanted to try with devicescript, using JSX with it sounded cool.
+But like any other platform, a driver is required to communicate with peripherals such as a screen.
 One such non existent driver was one for the SH1106.
-I badly wanted to use my SH1106.
+So wanting to know more about the I2C protocol and how to write drivers, I decided to give it my best shot.
 
-I did not spontaneously decide to write a driver for it, no, it took a while to fester. 
+I did not spontaneously decide to write a driver for it, no, it took a while for the idea to fester. 
 I first had to get over the self instilled fear of looking at datasheets.
 
-What helped with that was the fact that a good driver already existed for the SH1106 in C++ for the arduino platform, written by Adafruit,
+What helped with that was the fact that a good driver already existed for the SH1106, written in C++ for the Arduino platform,
 so I started by studying that.
 
 {/* Reverse Engineering  */}
 ### gnireenignE esreveR
 
+I had a great interest in the I2C protocol as I used it in most of my prior micro controller projects, 
+but I did not know how it works on a fundamental level, and I really like knowing the inner workings of stuff.
+The same with drivers, so learning to write a driver that uses I2C was like killing two birds with one stone.
+
+#### I2C
+
+First, what is I2C exactly?
+
+Each pin on a micro controller can be used to do something. 
+They can be setup in such a way to control external components outside the micro controller.
+A button for instance, requires one pin, a basic LCD1602 requires about 6 pins.
+
+If each and every external component requires their own exclusive pins, you'll eventually run out of pins on the microcontroller.
+
+Thankfully, back in 1982 some smart guys at Siemens were sitting with this exact predicament and they came up with I2C to solve their problem.
+
+I2C allows up to 127 devices to communicate using only 2 pins. 
+In other words, there are only 2 wires and each device wanting to communicate connects to these 2 wires using only 2 of their own pins.
+
+SO that LCD1602 of earlier? Slap a I2C backplate on it and bring the wires down to 2.
+Or, if you want to add another I2C device to expand the microcontroller's capabilities, simply connect it to the wires.
+
+As you can see, I2C is a extremely useful protocol and knowing how it works can be quite beneficial.
+
+So why only up to 127 devices on the wire? And how can each device be controlled individually?
 
 
 
