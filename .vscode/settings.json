@@ -9,6 +9,7 @@
   "deno.unstable": true,
   "cSpell.enableFiletypes": ["mdx"],
   "cSpell.words": [
+    "Devicescript",
     "Fadell",
     "Greve",
     "macguffin",

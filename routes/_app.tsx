@@ -28,7 +28,7 @@ export default function App({ Component }: AppProps) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Tailwind_Test</title>
+        <title>Reghardt's Blog</title>
         <link rel="stylesheet" href="/styles.css" />
         <link href={asset("/css/tailwind.css")} rel="stylesheet" />
 

@@ -1,11 +1,11 @@
-export const title = "Writing a OLED Display Driver in Typescript + Contributing to Open Source";
+export const title = "Writing a OLED Display Driver in Typescript + Contributing it to Open Source";
 export const date = "26 Sep 2023";
 export const peek = "";
 export const published = true;
 
 # {title}
 
-### Backstory
+### Intro
 
 During my first year of university, my father gave me a Raspberry Pi 3B as a gift.
 I loved it, it was the perfect complimentary gift to my CS degree.
@@ -14,10 +14,46 @@ But, I can still clearly recall the day I accidentally fried it when a loose jum
 
 I stared at it in disbelief, reconnecting the power cable, telling myself "its just a small malfunction, nothing to worry about".
 
-But alas, it did not come back to life. It was dead. 
-Sadness turned into anger a few years later when Raspberry Pi's nearly surpassed bitcoin in value due to shortages.
+But alas, it did not come back to life. It was dead.   
+Sadness turned into anger a few years later when Raspberry Pis nearly surpassed bitcoin in value due to shortages...
 
-Anyway, what was notable of that moment was that I was trying to get a LCD1602 to work with the Pi.
+Anyway, what was notable of that moment was that I just got a LCD1602 to work with the Pi.
+The Dunning-Kruger effect was strong at first when I opened the LCD's datasheet and thought, this is it, I'd be using it in no time.
+
+Wrong.
+
+Not understating a word, I soon downloaded a driver someone else wrote which worked perfectly.
+
+But what stuck with me was a deep admiration for the people trained in the mystical art of reading a datasheet, understanding it,
+and implementing a working driver according to its specifications.
+
+### Devicescript
+
+I stumbled upon Devicescript a few months ago and was intrigued. 
+Typescript on micro controllers?
+Native JSON? 
+Support for JSX?
+
+It sounded good, so I decided to try it out. I wanted to see how Typescript compares to C++ in a environment dominated by it.
+After a few experiments and getting the hang of things, I realized... I was having a blast.
+
+The project has been thought out really well, and it is chock full of interesting ideas.
+I would urge anyone to give it a shot and make up their own mind about it.
+
+But moving on to the display driver for now.
+
+Like any other "platform", a driver is required to communicate with peripherals.
+One such non existent driver was one for the SH1106.
+I badly wanted to use my SH1106.
+
+I did not spontaneously decide to write a driver for it, no, it took a while to fester. 
+I first had to get over the self instilled fear of looking at datasheets.
+
+What helped with that was the fact that a good driver already existed for the SH1106 in C++ for the arduino platform, written by Adafruit,
+so I started by studying that.
+
+{/* Reverse Engineering  */}
+### gnireenignE esreveR
 
 
 
