@@ -387,11 +387,57 @@ Whats this?:
 How does it work?:  
 
 ### Additional Features
-Toll fees
 
-Drag and drop
+#### Toll fees
 
-Linked addresses
+The app additionally displays Tolls on the planned route as it has a list of all the toll gates in south Africa including their coordinates and prices.
+To check if a toll gate is on the route, the Google Maps Geometry library is used.
+It checks if a toll gate is within a given distance of a poly line.
+Each toll gate may have more than one coordinate as some have ramp plazas.
+If a toll stretches over a wide double road highway each side has a separate coordinate as well.
+At first I only placed one coordinate in between the roads and relaxed the margins of the Geometry library,
+but this caused issues as sometimes the library might mistake a close by ramp as being on the route as well.
+So I opted for very tight tolerances and multiple coordinates to eliminate errors.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/tolls_on_route.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/tolls_on_route.PNG)
+
+Below is a bar graph that presents the toll prices. Both bars are identical as it is a return trip.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/toll_breakdown.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/toll_breakdown.PNG)
+
+
+#### Custom Drag and Drop
+
+I wanted to make it easy for users to manually rearrange the sequence of addresses. 
+Say for instance someone at address X can only receive there package(s) at 8 am, so they would be first in the list, 
+even though it might have been more efficient to delivery their package later.
+
+I looked at many different table libraries but none had the ability to group and then drag rows, as seen below.
+This was a problem as many spreadsheets are organized in such a way that the address and customer details are placed in the first row,
+then below that each on a separate row, the items they purchased.
+
+I ended up implementing my own using the html Drag and Drop API.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/mp_drag_and_drop.gif)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/mp_drag_and_drop.gif)
+
+
+#### Linked addresses
+
+This feature was specifically aimed at moving companies.  
+They need to pickup a person's stuff at a specific address and
+move it to another specific address, doing this multiple times per day.
+So if the pickup and delivery addresses are linked, can some optimization still take place? 
+For instance, if the moving team has 4 moves that day, can the moves be reordered to save time and fuel?
+
+Well, I did not create any optimization algorithm for this case, but the route planner can at least eye the fastest route.
+A route can still be found as normal, but respecting the pickup and delivery addresses.
+
+The green paths on the map are "links". Notice the arrow pointing out from and into some markers. They indicate the pickup and delivery addresses.
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses.PNG)
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses_on_map.PNG)
+
 
 
 ### Outreach
