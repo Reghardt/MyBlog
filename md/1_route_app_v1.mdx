@@ -13,13 +13,12 @@ Well, it didn't exactly turn out the way I hoped. It wasn't too successful at al
 
 But if I look back and compare my two selfs, one before starting the project and the other after, it's like comparing two different people.
 
-One battled to grasp React and struggled to get it to work nicely in the environment I wanted, 
-and the other didn't even break half a sweat setting up [tRPC](https://trpc.io/) in a react and express [Turporepo](https://turbo.build/repo) by pulling in knowledge straight from reading the relevant documentation. 
+At the start I had a hard time understanding React and struggled to get it to work nicely in the environment I wanted, 
+but by the end I had no problem reading multiple sources of documentation to setup a [Turporepo](https://turbo.build/repo) with React, Express and [tRPC](https://trpc.io/).
 
-An eye roll for some, but I felt accomplished, especially since I didn't have experience with any of tools I used up to then, except for express.
-It felt good to be able to see where I am and where I was.
+An eye roll for some, but I felt accomplished, especially since I didn't have experience with any of tools mentioned, except for express.
 
-Even if the project did not meet my expectations financially, it made me a better developer by significant leaps and bounds. 
+Even if the project did not meet my expectations financially, it made me a significantly better developer.
 
 This is the story of a developer's first attempt to make something.
 
@@ -31,7 +30,7 @@ The auction had already passed and our job was to label and get each item to the
 This was no easy task as the items in the hotel varied greatly in size and shape, from chinese porcelain, to intricate paintings, huge rugs, pottery, long tables and tall statues.
 Grand hotel is no overstatement, it was magnificent.
 
-My job was to label everything, my girlfriend managed the logistics of getting the items to the buyers via a six axel truck.
+My job was to label everything, my girlfriend managed the logistics of getting the items to the buyers via a large six axel truck.
 She first had to group buyers by relative area (by searching for each address on google maps).
 Then look up the combined volume of what each buyer bought.
 Based on that she had to order the buyers on the list to optimize for time.
@@ -42,15 +41,15 @@ She did all of this by hand using pen and paper and each route took about an hou
 
 This problem sparked my interest and I decided to see if I can automate some of the steps.
 
-I deconstructed the job into the following problems:  
+I deconstructed the job into the following requirements:  
 
 Addresses:  
 1\. Searching for individual addresses takes a long time.  
 2\. Keeping track of each address relative to the others are error prone.  
 Possible solution: A birds eye view of all the addresses on a map.
 
-Buyer Volume:  
-Unless the auction software exposes a DB api not much can be automated here.
+{/* Buyer Volume:  
+Unless the auction software exposes a DB api not much can be automated here. */}
 
 Delivery sequence and statistics:  
 3\. Fastest delivery order very unlikely if manually guesstimated.  
@@ -69,33 +68,35 @@ With these requirements in mind, I set out to solve the problem.
 
 ### Early Development
 Early development was rough. 
-I only had experience with c++ and Angular at this time, 
-and I figured c++ wasn't the right tool for the job so I chose the Angular approach.
+I only had experience with C++ and Angular at the time, 
+and I correctly figured C++ wasn't the right tool for the job so I chose the Angular approach.
 
 A basic proof of concept prototype was next. 
 It had to: 
 Accept a list of addresses, show them on the map and reorder them according to the fastest route.
 
 For the map I decided to use Google Maps due to their generous free credit each month (after which it gets expensive quick). 
-Furthermore, I believe they have the best data on South African roads and addresses. 
 
 The first big problem was finding the fastest single route, not wanting to write a complex algorithm myself I researched and found out
 that the Google Maps API has a "optimize route" option that can be selected when finding a route with multiple stops.
 I don't know how that option solves the traveling salesman problem but I guess they might be using something like [Or Tools](https://developers.google.com/optimization) on the backend.
 So that was an easy solution to one of the biggest problems, at least for this simple case.
 
-It did not take too long to get a basic prototype up and running with Angular, and it worked well. Address could be typed into rows and searched for using the Google Geocoder API, 
-the address are then displayed on the map and finally a route could be found that rearranges the addresses by fastest route.
+It did not take too long to get a basic prototype up and running with Angular, and it worked well. 
+Addresses could be typed into rows and searched for using the Google Geocoder API, 
+the addresses were then displayed on the map and finally a route could be found that rearranges the addresses by fastest route.
 
-The biggest problem though, was actually using the rearranged list of addresses.
-Rearrange the addresses in Excel by hand by looking at the app's order? 
-Copy and paste to Excel? Or Generate A pdf? But then a whole lot of other information will also need to be given to the app like name and surname, cellphone nr...
-It was problematic, I did not forsee this step as the biggest problem.
+The biggest problem though, was actually using the rearranged list of addresses:
+Should the user be expected to rearrange the addresses in Excel by hand by looking at the app's order? 
+Or alternatively copy and paste to Excel? Or Generate A pdf? 
+But then if the app is expected to generate a pdf trip sheet,
+then a whole lot of other information will also be needed like name and surname, cellphone nr...
 
-I looked into any "Excel like" spreadsheet libraries available in javascript, and there were some good ones, but I also stumbled upon the Excel API.
+To explore the pdf route I looked into some "Excel like" spreadsheet libraries available in javascript, 
+and there were some good ones, but then I stumbled upon the Excel API.
 
 Now this was really interesting. It allows a web app to run right inside of Excel and interact with data on the spreadsheet programmatically!
-All Excel requires is a manifest file that pointed to the url your website is hosted on.
+All Excel requires is a manifest file that points to the url your website is hosted on.
 This was perfect, especially since people already use Excel for trip sheets and they usually tend to stick to what they already know. 
 It won't be a totally new and unfamiliar app to users,
 it will merely be an extension to a tool they are already familiar with.
@@ -108,13 +109,14 @@ A great darkness, undefeated until recently... It goes by the name of... of Inte
 
 ### Making it work
 
-This was about 2 years ago at the time of writing and Internet Explorer has not been killed of entirely yet. Guess where it was still used?
-The environment in which Excel addons are supposed to run in...
-This caused a series of headaches, one being that I had just written the proof of concept in Angular 12, and second, lots of libraries don't support IE11 anymore.
+This was about 2 years ago at the time of writing and Internet Explorer has not been killed off entirely yet. Guess where it was still used?
+The iframe used for add ins inside of Excel..
+This caused a series of headaches, one being that I had written the proof of concept in Angular 12, which deprecated IE11 support, 
+and additionally, lots of libraries did not support IE11 anymore.
 Like for instance Angular Material.
 
-I spend a few days trying to get Angular to work in the IE11 environment to no avail.
-I was really really sick of struggling, so much so that I decided to let my beloved Angular go in search of greener pastures.
+I spend a few days trying to get Angular to work in Excel, but to no avail.
+I was really, really sick of struggling, so much so that I decided to let my beloved Angular go in search of greener pastures.
 
 The other two frameworks the Excel Addon Docs had tutorials for was React (of course) and Vue (of course).
 I didn't know a lot about Vue at all so I decided to try React. 
@@ -122,76 +124,70 @@ This was an odd choice because the last time I tried React (very briefly) I coul
 This was in my compiler construction course though.. Yes I wrote a simple compiler in JS, with BASIC as the target language. It was a lot of fun.
 
 Anyway, after a lot of trial and error, and meticulously picking apart the Excel React starter template I could make a new up to date React 17 Excel add in from scratch.
-It is worth mentioning that this was still in IE11, and I needed some hackery to keep everything together, for instance, not one of their templates supported routing. 
-this is because, for some reason the Excel API library deletes some function in the global object that is required for routing. 
+It is worth mentioning that this was still in IE11, and I needed some hackery to keep everything together, for instance, not one of their templates supported client side routing. 
+The reason being that for some reason the Excel API library deletes some function in the global object that is required for routing. 
 It had to be cached before loading the library and restored after. Then routing worked perfectly. Thanks Stack Overflow.
 
-Skip ahead a few months of development and I had learned a lot. I tried many things that failed as I did not know better, but I leaned every step of the way.
-And I think I became rather good at React, and dare I say, I started to like it. I started to like it a lot. Maybe even more than Angular. Gasp!
+Skip ahead a few months of development and I had learned a lot.
+I think I actually started to get rather good at React, and dare I say, I started to like it. I started to like it a lot. Maybe even more than Angular. Gasp!
 
 ### Warming up to React
-I was some mixture of laughter, disbelieve and disgust when I searched "React routing" the first time and learned that react does not have built in Routing.
+I was some mixture of laughter, disbelieve and disgust when I searched "React routing" the first time and learned that React does not have built in Routing.
 How could it not have built in routing? You have to download a third party library?
 
 It was like this for everything in React. 
-In contrast to angular, it includes everything, even the kitchen sink by default or as a first party library. 
+In contrast to Angular, it includes basically everything you need out of the box, including the kitchen sink. 
 If you wanted to use the kitchen sink in React you'd have to go and download the third party KitchenSink.js library.
 
-But later on as I got more experienced and comfortable with React I realized, that feeling I had had vanished.
-I realized that it is actually extremely beneficial that React only focuses on doing a small set of thing right and letting the community 
-write libraries that add the rest to their hearts content.
+But later on as I got more experienced and comfortable with React I realized that it is actually extremely beneficial that React only focuses on doing a small set of thing right and letting the community 
+write libraries that add the rest to their heart's content.
 The result of this is unbound freedom, and freedom leads to innovation. 
 Want to do routing in react? There are 500+ different libraries, all with different ways of doing things. 
-Sometimes two libraries may have the same goal but approach the problem with two totally different mental paradigms.
+Sometimes two libraries will solve the same problem with two totally different mental paradigms.
 Just look at the smorgasbord of different state management libraries there are, or meta frameworks.
 
 They are all fantastic and and amazing in their own right, and I find that extremely exciting. 
-React is innovating and evolving at light speed and thats a good thing, and if it's not it evolving it's some other framework that was inspired by it
+React is innovating and evolving at light speed and thats a good thing, and if it's not React evolving, it's some other framework that was inspired by it
 
 ### The App
-I will now show you how the app works and what it can do, I'll use a real use case and explain different bits and peaces as I go.
-Also, I never completely finished the app, its sitting ata around 90% done, 
+I will demo how the app works and what it can do, I'll use a real use case and explain different bits and peaces as I go.
+Also, I never completely finished the app, its sitting at around 90% done, 
 It is missing a payment system (I did that in the next version) and there are some other small things I still had to do.
 
 But none the less, I learned a lot and I am proud of what I have accomplished, especially since this is my first real attempt at building something.
 
 #### 1\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip.PNG)
+[![List of addresses](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip.PNG)
 
 Whats this?:  
 Assume for demonstrative purposes that this is the list of deliveries that a user has to find a route for.
 It's a bunch of shopping centers. Let's say we deliver flowers or something.
 
 How does it work?:  
-Well, it's Excel... in this case we would like to reorder the addresses according to the shortest/fastest route and we would like to use Marco Polo to do that. 
+Well, it's Excel... in this case we would like to reorder the addresses according to the shortest/fastest route and we would like to use Marco Polo (The name of my app) to do that. 
 We need to get this data into Marco Polo for manipulation.
 
 #### 2\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/add_in.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/add_in.PNG)
+[![Login page](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/add_in.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/add_in.PNG)
 Whats this?:  
 Here you can see the app running inside of Excel. This is the login screen a user is greeted with when opening the app.   
 
-How does it work?:
-For Microsoft sign in it uses their MSal service which returns a user token containing a user's MS Id, among other things.
-On clicking the "Sign in with Microsoft" button the user is navigated to a static page hosted on the server (Express + EJS) which allows the user to sign in with MS.
-The server then receives the MS auth token, creates a Bearer from than an attaches it to the header of a redirect that loads the React app once more.
-In development the Express server serves the react app so the server receives the "Sign in with Microsoft" request directly, but in development React forwards the 
-request to the server via a proxy. Excel complains when an add on is not served over https, so the React app had to use a self signed cert in development. 
-The server did not, the proxy fixed that.
+How does it work?:  
+For Microsoft sign in it uses their MSal service which returns a user token containing a user's MS ID. The ID then gets attached to subsequent server requests as a bearer token.
+I rolled my own auth, which with my limited experience back then was not a good idea, but it gave me a lot of insight into how auth works.
 
-Honestly I cannot remember why I did it this why. It sounds terribly complicated in retrospect, but there was some error I struggled with for a long time and this got around it.
 
 #### 3\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/my_workspaces.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/my_workspaces.PNG)
+[![My Workspaces](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/my_workspaces.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/my_workspaces.PNG)
 
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/create_workspace.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/create_workspace.PNG)
+[![Create Workspace](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/create_workspace.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/create_workspace.PNG)
 
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/select_workspace.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/select_workspace.PNG)
+[![Select Workspace](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/select_workspace.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/select_workspace.PNG)
 
 Whats this?:  
 To use the app a user has to create or be invited to join a workspace. The idea of a workspace is to facilitate the easy sharing of certain information between all the members of a workspace.
@@ -202,21 +198,18 @@ The person that creates the workspace owns it. They then have the ability to inv
 When a user selects a workspace a new bearer token is created on the server that gets sent to the client. This bearer can be used to only access that workspace.
 The invite system has not been completed as I prioritized to get everything else to work first.
 
-I simply added a users ID to the users array of each workspace document a user belongs to. (I used MongoDB, more on that later).
-Scanning through each documents array to see if a user matches and returning the workspace ID of each match. This would have probably become slow and expensive as 
-more workspaces and users were added but thats not a problem if you don't have any users.. (I don't think secondary indexes work on arrays in mongo?)
-
 
 #### 6\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip_builder_1.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip_builder_1.PNG)
+[![Trip builder 1](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip_builder_1.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip_builder_1.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip_builder_2.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip_builder_2.PNG)
+[![Trip builder 2](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip_builder_2.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/trip_builder_2.PNG)
 
 Whats this?:  
-This is the app without anything loaded yet. 
+After selecting a workspace, the user gets navigated tp that workspace's trip builder page.
+This is where routes can be created.
 At the very top right you can see the amount of tokens available to this workspace. Tokens are consumed on selecting addresses and finding routes.
-Tokens would have been shared among all users using the workspace.
+Tokens would have been shared among all members of the workspace.
 
 Next is the circuit switch. If enabled the Departure address gets used as the return address. If disabled a return address text box appears.
 The address book is used to store and name frequently used addresses that may be reused.
@@ -228,31 +221,32 @@ Stay tuned for the next episode..
 
 #### 7\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/load_selected.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/load_selected.PNG)
+[![Load Selection](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/load_selected.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/load_selected.PNG)
 
 Whats this?:  
-Welcome back! Here you can see the data selected on the left has been loaded into the program on the right, 
-this happens when using the "Load Current Selection" macguffin from the previous episode.
+Here you can see the selected cells on the left loaded into the program on the right, 
+this happens when pressing the "Load Current Selection" button from the previous image.
 
 How does it work?:  
 The app uses the Excel API to connect to the Excel host applications process and let it know that we are interested in the current selection. 
-It is quite the laborious process to get the selection's data because it requires a lot of transformations.
-I also added some precautionary checks for possible user error, for instance some unequal selection ie 4 columns in row 1 and 3 in row 2 .
+It is quite a laborious process to get the selection's data as it requires a lot of transformations.
+I also added some precautionary checks for possible user error, for instance some unequal selection ie 4 columns in row 1 and 3 columns in row 2 .
 It is also possible to select islands, say if only column A and C has relevant data.
 Additionally checks are in place to see if the selection contains previously loaded cells, in which case they are replaced in program state for if they have been updated.
-I am very proud of this section of the program, I had a lot of fun.
+I am very proud of this section of the program, I had a lot of fun with it.
 
 
 #### 8\.
 
 [![Addresses dropdown](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_dropdown.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_dropdown.PNG)
 
-[![Addresses dropdown](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/address_finder.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/address_finder.PNG)
+[![Address finder](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/address_finder.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/address_finder.PNG)
 
 Whats this?:  
-Here we tell the program which columns are important. As seen previously each column has a dropdown above it in which can be selected what the the context of that column is.
+Here we tell the program which columns are important. 
+As seen previously each column has a dropdown above it, which can be used to indicated to the app what type of data the column contains.
 It can either be address, linked address or data.
-Address is self explanatory. Linked address can probably be best used by moving companies. 
+Address and data are self explanatory. Linked address can probably be best used by moving companies. 
 For example, a moving team may be doing 4 moving jobs per day and each move has a specific start and end address which must be seen as a immutable unit. 
 To better explain imagine the 4 jobs for the day:
 Depart -> 1A -> 1B -> 2A -> 2B -> 3A -> 3B -> 4A -> 4B -> Return.   
@@ -265,7 +259,7 @@ This state cannot be exited if an address has an error or has not been confirmed
 If one has an error it can be clicked which opens a dialog that allows the address to be updated and searched for.
 
 How does it work?:  
-On specifying an address column each address gets submitted to the [programmatic version](https://developers.google.com/maps/documentation/javascript/place-autocomplete#place_autocomplete_service) of the google places autocomplete api. 
+On specifying an address column each address gets submitted to the [programmatic version](https://developers.google.com/maps/documentation/javascript/place-autocomplete#place_autocomplete_service) of the Google Places Autocomplete API. 
 Meaning it does not require the user to type anything to get a result.
 The result of that request then gets displayed as the "Found" result under each "Given" address.
 
@@ -273,16 +267,18 @@ I should have added 2 embedded google maps in a popup next to each other compari
 
 #### 9\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_confirmed.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_confirmed.PNG)
+[![Confirmed Addresses](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_confirmed.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_confirmed.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_on_map.PNG)
+[![Addresses On Map](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/addresses_on_map.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/search_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/search_on_map.PNG)
+[![Search On Map](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/search_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/search_on_map.PNG)
 
 Whats this?:  
 Here all the addresses have been confirmed and they now have a little shield next to them. They are now displayed on the map as well.
 
-Notice the green "D+R" circle on the map. Thats the Departure and Return address. I did not show the step but I added it with the circuit option active.
+Notice the green "D+R" circle on the map. 
+Thats the Departure and Return address. 
+I did not show that step but I added the D+R address with the "circuit" option active.
 
 The user may add additional addresses to the map and table by using the "Search Address" accordion on the map. It makes provision for a link address as well.
 If an address is added this way, it gets added to the address table with all cells blank except for the address columns.
@@ -290,37 +286,41 @@ Additionally, this method may be used without selecting anything from the spread
 This creates a problem once the user want to write the data to the spreadsheet, which will be discussed later.
 
 How does it work?:  
-I might write about the custom elements on the map here.. 
-They are React components using [createPortal](https://react.dev/reference/react-dom/createPortal). 
+Addresses in the app simply consists of an array of address types.
+A few checks are done to see if they are valid.
+The elements on the map are custom, placed there using [createPortal](https://react.dev/reference/react-dom/createPortal).
+{/* They are React components using [createPortal](https://react.dev/reference/react-dom/createPortal). 
 The Google Maps api only allows vanilla HTML and JS to be [added to the map](https://developers.google.com/maps/documentation/javascript/customoverlays), but if a reference is kept to those elements a portal can be used to teleport in some react components.
-Don't assume I knew how to do this. I followed some smart guy's tutorial. Learned a lot though.
+Don't assume I knew how to do this. I followed some smart guy's tutorial. Learned a lot though. */}
  
 
 #### 12\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/route_found.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/route_found.PNG)
+[![Route found](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/route_found.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/route_found.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/route_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/route_on_map.PNG)
+[![Route on map](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/route_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/route_on_map.PNG)
 
 Whats this?:  
 A route has been found, the addresses in the table has been reordered according to the fastest route and that route is shown on the map.
 I would have preferred the route be the other way around, but that can easily be fixed by pressing the "Reverse Order" button.
 
 How does it work?:  
+Routes are computed with the Google Routes API. 
+If the "optimize route" option is checked it returns a array of numbers indicating how the addresses should be reordered.
 
 
 #### 14\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/vehicle.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/vehicle.PNG)
+[![Vehicle](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/vehicle.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/vehicle.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/vehicle_list.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/vehicle_list.PNG)
+[![Vehicle List](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/vehicle_list.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/vehicle_list.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/create_vehicle.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/create_vehicle.PNG)
+[![Create Vehicle](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/create_vehicle.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/create_vehicle.PNG)
 
 Whats this?:  
-There are many types of vehicles that a company might use, this feature alow a user or company to model all their vehicles in their fleet.
+There are many types of vehicles that a company might use, this feature allows a user or company to model all their vehicles in their fleet.
 To create a vehicle requires some information, like fuel consumption and the class of vehicle.
-The class of vehicle correspond with how big it is, and how much toll fees it needs to pay.
+The class of vehicle correspond with how big it is, and how much toll fees it has to pay.
 Class 1 might be a car and class 4 might be a big long haul truck.
 
 The app calculates fuel costs and toll costs according to the given fuel consumption and vehicle class. 
@@ -329,39 +329,38 @@ An example will be shown later.
 How does it work?:  
 The server creates a vehicle document and places it into an array in the workspace document. This allows vehicles to be shared between all users belonging to a workspace.
 You will note that the create vehicle dialog asks for a license plate and vehicle name. 
-I had an additional app or module in mind that would have displayed each vehicles live location, in addition to who is driving it. 
+I had an additional app or module in mind that would have displayed each vehicle's live location, in addition to who is driving it. 
 I figured that displaying the license plate and vehicle name would have been handy information.
 I called this module Venice. Continuing the theme of Marco Polo as he was born there.
 
 
 #### 17\.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/cost.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/cost.PNG)
+[![Cost](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/cost.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/cost.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/time_distance.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/time_distance.PNG)
+[![Time and Distance](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/time_distance.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/time_distance.PNG)
 
 Whats this?:  
-Here you can see statistics of the trip based on the vehicles fuel consumption and class.
+Here you can see statistics of the trip based on the selected vehicle's fuel consumption and class.
 
 How does it work?:  
 The maps API returns the distance and time of each leg so I simply ( after a lot of transformations ) used that information and combined it with the vehicle costs to get the above statistics.
 The way the cost graph is displayed might be flawed from the perspective of a logistics manager.
 For example, according to the cost graph person 5 will only be charged R2.53 for his deliver cost (assuming the company does not want to make a profit on deliveries) because
-person 4 pays the bulk of getting the vehicle on the general area of person 4 and 5.
+person 4 pays the bulk of getting the vehicle in the general area of person 4 and 5.
 What would have worked better here is a distance matrix. 
 This way each delivery's cost would have been calculated in isolation without additional deliveries (ie start -> deliver to single address -> return), 
 the result of this would be that person 4 and 5 pays about the same, and that no one would be subsidizing anyone elses delivery.
 
 #### 17\.
-Write back
+[![Write back](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/write_back.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/write_back.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/write_back.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/write_back.PNG)
-
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/write_back_anchor.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/write_back_anchor.PNG)
+[![Write back anchor](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/write_back_anchor.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/write_back_anchor.PNG)
 
 
-Whats this?: 
-The reordered route should be easy to use, one use case would be to have the original route be updated according to the new one.
+Whats this?:  
+The reordered route should be easy to use, 
+one use case would be to update the Excel spreadsheet according to the new reordered address list generated by Marco Polo.
 Pressing "Write Back" does so, the result of which can be seen above. Notice the "Ref" column is no longer ordered from 1 to 8 as it was at the start.
 Additionally, note that items are still grouped under their ref number.
 
@@ -372,25 +371,30 @@ It then clears all the cells in that selection and writes the new data in its pl
 There was a whole host of edge cases that had to be considered, like what if a row in the middle gets deleted by the user?
 Or what if there are spaces between two island selections?
 
-The simplest solution was to get the top left most cell in the selection and use that as an anchor. If there were empty rows they get compacted when writing back the data.
+The simplest solution was to have MP get the top most and bottom most cell in the selection, 
+then delete everything in between, after which the new data is written back to Excel, using the top-left most cell as an anchor.
+Any empty rows are compacted.
+Additionally, formulas are maintained.
 
 Another case is when the user does not use a selection but creates all the addresses in the app itself. (This can be done from the Map).
 In this case there was no anchor cell so to solve this the app asks a user to select an anchor cell.
 This can be seen in the second image.
 
-#### 18\.
+#### 18\. Send to driver
 
-Send to driver
+Another use case would have been sending the trip sheet to the driver in digital form.
+For this I wrote a simple PWA mobile app using Next JS, called Marco Polo Travels.
+Drivers could be invited to workspaces in MP and assigned trips.
+The app simply showed them the list of addresses in each trip, with the ability to navigate to them using Google Maps URLs.
 
-Whats this?:  
-
-How does it work?:  
+In my next blog post I will write about how ZA Routes (my new and improved routing app) approaches this feature.
+ 
 
 ### Additional Features
 
 #### Toll fees
 
-The app additionally displays Tolls on the planned route as it has a list of all the toll gates in south Africa including their coordinates and prices.
+The app additionally displays Tolls on the planned route as it has a list of all the toll gates in South Africa, including their coordinates and prices.
 To check if a toll gate is on the route, the Google Maps Geometry library is used.
 It checks if a toll gate is within a given distance of a poly line.
 Each toll gate may have more than one coordinate as some have ramp plazas.
@@ -399,17 +403,17 @@ At first I only placed one coordinate in between the roads and relaxed the margi
 but this caused issues as sometimes the library might mistake a close by ramp as being on the route as well.
 So I opted for very tight tolerances and multiple coordinates to eliminate errors.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/tolls_on_route.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/tolls_on_route.PNG)
+[![Tolls on route](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/tolls_on_route.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/tolls_on_route.PNG)
 
 Below is a bar graph that presents the toll prices. Both bars are identical as it is a return trip.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/toll_breakdown.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/toll_breakdown.PNG)
+[![Toll stats](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/toll_breakdown.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/toll_breakdown.PNG)
 
 
 #### Custom Drag and Drop
 
 I wanted to make it easy for users to manually rearrange the sequence of addresses. 
-Say for instance someone at address X can only receive there package(s) at 8 am, so they would be first in the list, 
+Say for instance someone at address X can only receive their package(s) at 8 am, so they would be first on the list, 
 even though it might have been more efficient to delivery their package later.
 
 I looked at many different table libraries but none had the ability to group and then drag rows, as seen below.
@@ -418,7 +422,7 @@ then below that each on a separate row, the items they purchased.
 
 I ended up implementing my own using the html Drag and Drop API.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/mp_drag_and_drop.gif)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/mp_drag_and_drop.gif)
+[![Drag and drop](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/mp_drag_and_drop.gif)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/mp_drag_and_drop.gif)
 
 
 #### Linked addresses
@@ -430,28 +434,30 @@ So if the pickup and delivery addresses are linked, can some optimization still 
 For instance, if the moving team has 4 moves that day, can the moves be reordered to save time and fuel?
 
 Well, I did not create any optimization algorithm for this case, but the route planner can at least eye the fastest route.
-A route can still be found as normal, but respecting the pickup and delivery addresses.
+A route can still be found as normal, but it treats each pickup and delivery addresses of a move as a unit.
 
-The green paths on the map are "links". Notice the arrow pointing out from and into some markers. They indicate the pickup and delivery addresses.
+The green paths on the map are "links". Notice the arrow pointing out from and into some markers. They indicate the pickup and delivery addresses of each move.
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses.PNG)
+[![Link Addresses](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses.PNG)
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses_on_map.PNG)
+[![Link Addresses on map](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses_on_map.PNG)](https://remblog.s3.af-south-1.amazonaws.com/1_first_dev/link_addresses_on_map.PNG)
 
 
 
 ### Outreach
-I knew I had to go to people and show them what I have build if I wanted to make a success of the app, and oh boy did I step outside my comfort zone.
+I knew I had to go to people and show them what I built if I wanted to make a success of the app, and oh boy did I step outside my comfort zone.
 The app was in its infancy when I decided to step into the office of a rather big mattress delivery company and gave them a demo.
 I was shaking, sweaty and fell all over my words, but I did it, and they were actually impressed.
 So much so that the manager set me up for a meeting with their logistics manager. 
-We had a great chat and he allowed me to install the app on the laptop of one of their logistics guys. He, just like my girlfriend also planed each route by hand, and they used excel!
+We had a great chat and he allowed me to install the app on the laptop of one of their logistics guys. 
+He, just like my girlfriend also planed each route by hand, and they used Excel!
 
 He was very kind and patient, I learned a lot from him and his feedback. His direct feedback substantially improved the app.
-But he never used it, and always promised he would the next time he planned routes.
+But he never used it, and always promised he would the next time he planned a route.
 
 Was it that the app was bad? Did it lack features?
-I added a bunch of features specificity per his request, but he suggested these features every time I demoed a new version to him, not out of experience by using the app.
+I added a bunch of features specificity per his request, but he suggested these features every time I demoed a new version to him, 
+not out of experience by using the app.
 
 I might be mistaken but I believe it might come down to what Tony Fadell said in his book Build: 
 People will continue using what they know even if it is inferior to something new. They will choose familiarity over betterment.
@@ -459,30 +465,30 @@ People will continue using what they know even if it is inferior to something ne
 Change is hard to instill.
 
 The next major meeting I had was with a big moving company, it was thanks to my girlfriend that made this possible. She is on good terms with the owner.
-Even though the meeting was fantastic and we exchanged a many ideas, they did not really have a need for the app in its current state.
+Even though the meeting was fantastic and we exchanged many ideas, they did not really have a need for the app in its current state.
 
 She suggested that I talk to their tracking company so it can be integrated with their services. 
-She would have likes that the planned route be shared with the tracking company, and when the truck deviates unexpectedly they can respond if needed.
+She would have liked that the planned route be shared with the tracking company, and when the truck deviates unexpectedly they can respond if needed.
 
-So I got set up with the tracking company and exchanged a few emails. 
+So I got set up with their tracking company thanks to her and we exchanged a few emails. 
 But they were not interested in any integration as they already had a similar app with which companies may submit their routes to.
 They sent me and the owner of the moving company a brochure on how their app works and what it does.
 Even though we were solving different problems, 
 I dare say that that I believe that my approach could have been adapted better to solve their problem.
 
-From their perspective tracking comes first (they are a tracking company after all), 
+From their perspective, tracking comes first (they are a tracking company after all), 
 but this creates a problem in that except for tracking they don't create an incentive 
 to use their app. Ease of use in terms of route finding and planning was an afterthought.
 
 I think the better approach would have been to create an app that has excellent route finding and planning abilities and add tracking to that, not the other way around.
-I admit I might be wrong and biased in my observations, but until I can see a hands on demo I will stay by my them.
+I admit I might be wrong and biased in my observations, but I am not scared to be proven wrong.
 
 These were the two noteworthy events, I did a few others, botched some but I learned a lot, and I quite enjoyed it.
 
 ### Moving On
 
 I cant say im sitting on a yacht, drinking champaign and smoking a cuban cigar while writing this.
-I was not awarded with financial success but rather self betterment and expansion of my knowledge and skills.
+I was not awarded with financial success but rather expansion of my knowledge and skills.
 
 I decided to sunset this project as I was losing money on it. I was self hosting on an EC2 instance and it cost me money that I did not have. 
 I can do it for much, much cheaper today but that was all I knew back then.
@@ -491,11 +497,11 @@ Excluding expenses, the app was suffering from technical debt, I did not settle 
 there was spaghetti dependencies everywhere and it was getting hard to change and add features.
 
 The scope has also greatly expanded beyond my abilities and time. It was not a simple route finding app anymore. 
-It had a lot of intricate features and supporting apps, like a mobile app for drivers and the "live tracking" app Venice.
+It had a lot of intricate features and supporting apps, like the mobile app for drivers and the "live tracking" app Venice.
 
 I decided to move on, take everything I learned and start over.
 
-### What I learned and used
+{/* ### What I learned and used
 
 I always find it absolutely fascinating to learn what someone used to build something.
 I check nearly every site I go to with (wappalyzer)[https://www.wappalyzer.com/].
@@ -522,16 +528,15 @@ Fresh for instance, it is really well though out. Solid is also interesting, esp
 And Lastly Qwik, I think resumability might just be the way forward. (haven't explored RSC's at the time of writing).
 
 After trying Tailwind I very much started to like it. It works well and it is extremely flexible.
-So much so that I wrote a tutorial to get Tailwind working with Fresh here: Tailwind in Fresh JS
-
-### Hosting
+So much so that I wrote a tutorial to get Tailwind working with Fresh here: Tailwind in Fresh JS */}
 
 ### Takeaway
 
-It is hard building an app, really hard. But the actual building might actually be the easiest part. 
-The actual hard part is pushing through and getting people to use it.
+It is not easy to build an app, but I think the actual building might be the easiest part. 
+The hard part is pushing through and getting enough people to use it.
+For this it has to solve an real problem of sufficient annoyance well enough that people are willing to use the the solution over their existing method or lack thereof.
 
 With this project I tried and failed. But I am proud and grateful of what I achieved and that I had this opportunity.
 
-My future prospects are to try, fail and learn more, 
-if this continues for long enough I might just have a success story to tell one day.
+My future prospects are to try again, fail again, or maybe succeed, but I am happy as long as I can learn and improve myself along the way. 
+{/* if this continues for long enough I might just have a success story to tell one day. */}
