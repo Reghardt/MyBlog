@@ -7,22 +7,21 @@ export const published = true;
 
 ### Intro
 When I was about 10,
-I was in my fathers study room going trough all the interesting stuff he built and collected over the years.
-He has a diploma in Electronics and build some truly amazing stuff way back when.
+I was in my fathers study room going trough all the interesting electronics he built and collected over the years.
+He has a diploma in Electronics and built some truly amazing stuff way back when.
 
-One of his old projects he told me about was a LED billboard that could display text with a bunch of different animations.
+One of the projects he told me about was a LED billboard that could display text with a bunch of different animations.
 They could slide in, roll out, be eaten by a packman or move across the screen.
 And he only used assembly! 
 
-Naturally I asked him how these magical things worked, how do these black bricks and other weird components result in something cool?
+Naturally I asked him how these magical things worked, how do these black bricks and other weird components result in something like this.
 
-He probably did not expect me to understand, and I didn't, but he told me they communicate with a language called binary,
+He probably did not expect me to understand, and I didn't much, but he told me they communicate with a language called binary,
 and that language only consists of zeroes and ones.
+After which proceeded to write down 1 to 10 on a piece of paper with their corresponding binary representations to demonstrate.
 
-I was awe struck, he proceeded to write down 1 to 10 on a piece of paper with their corresponding binary representations.
-
-Even though I did not understand exactly what was being shown to me, 
-I was captivated none the less, he has sparked a curiosity that has only grown with time.
+Even though I did not really understand what was being shown to me, 
+I was captivated none the less, and that memory has stayed with me ever since.
 
 ### Backstory
 
@@ -35,16 +34,17 @@ My Father has one of these water tanks on a tower in his back yard:
 [![Water tower](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/water_stand.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/water_stand.jpg)
 
 This works great, but on occasion the tank would be overfilled and waste excess water. 
-Or in contrast tanks water will be depleted if the bore hole has not been turned on for some time.
+Or in contrast, the tank's water will be depleted if the bore hole has not been turned on for some time.
 
-There are float valves available to solve these issues. This works similar to the float in a toilet water reservoir, 
+There are float valves available to solve these issues. This works similar to the float in a toilet's water reservoir, 
 if the water level drops below a certain point the float will turn on the bore hole to fill the tank.
-But this usually means that the bore holes power line should visit the float valve before going to the pump itself.
+But this usually means that the bore hole's power line should visit the float valve before going to the pump itself.
 The float valve simply acts as a switch in this case that turns on the bore hole.
 
-To install a float valve the bore holes power lines has be be dug up, rerouted and buried. This can result in a considerable amount of work.
+To install a float valve the bore hole's power lines has be be dug up, rerouted and buried. This can result in a considerable amount of work.
 
-I asked my father if he would be interested if I design and install a custom float valve like system myself. He said yes.
+One day I had the idea to to ask my father if he would be interested if I design and install a custom "float valve like" system myself to solve the issue. 
+He said yes. This is that project.
 
 ### Early Development
 
@@ -55,24 +55,24 @@ And finally the relay unit that receives commands from the control unit to start
 
 The biggest problem I faced during planning was figuring out how to measure the water level in the tank.
 
-I fist thought of making a magnet float on the waters surface and have that slide up and down a pipe with coils warped around to detect the magnets magnetic field at set points.
+I fist thought of making a magnet float on the surface of the water and have that slide up and down a pipe with coils warped around to detect the magnetic field at set points.
 But having that scale to different sized tanks might have been difficult, additionally it would not have given a great measuring resolution.
 
-The second idea was to have a flat disk float on the waters surface and to use a laser range finder to get distance readings of of it. 
+The second idea was to have a flat disk float on the surface and to use a laser range finder to get distance readings from it. 
 This might have worked but laser range finders are expensive.
 
 When searching for laser range finders I stumbled upon ultrasonic range finders. The last time I used one of these was with my NXT Lego kit a great many years ago.
-The idea behind an ultrasonic sensor in a water tank is that the sound waves would bounce of the waters surface as water is denser than air.
+The idea behind an ultrasonic sensor in a water tank is that the sound waves would bounce of the water's surface as water is denser than air.
 The time taken for the sound waves to return can be used to get the distance traveled and 
 from that the water level can be calculated knowing a few other parameters like sensor height and tank depth.
-The logic checked out on the internet and I decided to take tha ultrasonic approach.
+The logic checked out on the internet and I decided to take the ultrasonic approach.
 
-The second issue was communication between the units. I figured wireless would be great and found some NRF 01 transceivers to fit the bill.
+The second issue was communication between the units. I figured wireless would be great and found some NRF 01 transceivers that fit the bill.
 In case they were not suitable I decided to buy some RS485 units which communicate over wire, just to be safe.
 
 After receiving everything I had to build a proof of concept. It looked like this:
 
-[![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/first_prototype_crop.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/first_prototype_crop.jpg)
+[![Prototype](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/first_prototype_crop.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/first_prototype_crop.jpg)
 
 The left Arduino acts as the control unit, it receives sensor readings from the right Arduino that acts as the sensor unit.
 They are connected to each other by wire (the black one under the keyboard), each using a RS485 transceiver to send or receive data over the wire.
@@ -98,16 +98,16 @@ There were some erroneous readings, although significantly less than I expected,
 
 The next step was to design a PCB board.
 
-I ended up with this:
+{/* I ended up with this:
 //////////////////// Picture here
 
 Here is the schematic:
-//////////////////// Picture here
+//////////////////// Picture here */}
 
 Each unit would share the same PCB design, bit with different components mounted to fulfill their different roles.
 In theory this would allow one unit to act as the sensor, control and relay unit at the same time, if required to do so.
 
-#### 1\. PCB Variations
+#### 1\. PCB
 
 [![PCB variations](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/pcbs.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/pcbs.jpg)
 
@@ -168,7 +168,7 @@ Here you can see me test fitting and later placing the sensor unit in the tool s
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/screen_cut.jpg)
 
-For the control unit I used a dremel tool to cut out a rectangle for the screen to fit in. For the keypad I cut a little slit for the membrane cable.
+For the control unit I used a Dremel tool to cut out a rectangle for the screen to fit in. For the keypad I cut a little slit for the membrane cable.
 
 In retrospect I should have used my Fathers CnC machine but I did not think of that..
 
@@ -177,6 +177,9 @@ In retrospect I should have used my Fathers CnC machine but I did not think of t
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_installed.jpg)](https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/ctrl_unit_installed.jpg)
 
 And finally, here is the control unit with its relay after installation.
+
+### Usage
+
 
 
 ### Problems

@@ -1,4 +1,4 @@
-export const title = "Writing a OLED Display Driver in Typescript + Contributing it to Open Source";
+export const title = "Writing a OLED Display Driver in Typescript + Contributing to Open Source";
 export const date = "26 Sep 2023";
 export const peek = "";
 export const published = true;
@@ -54,7 +54,7 @@ What helped with that was the fact that a good driver already existed for the SH
 so I started by studying that.
 
 {/* Reverse Engineering  */}
-### gnireenignE esreveR
+{/* ### gnireenignE esreveR
 
 I had a great interest in the I2C protocol as I used it in most of my prior micro controller projects, 
 but I did not know how it works on a fundamental level, and I really like knowing the inner workings of stuff.
@@ -80,7 +80,27 @@ Or, if you want to add another I2C device to expand the microcontroller's capabi
 
 As you can see, I2C is a extremely useful protocol and knowing how it works can be quite beneficial.
 
-So why only up to 127 devices on the wire? And how can each device be controlled individually?
+So why only up to 127 devices on the wire? And how can each device be controlled individually? */}
+
+### The SH1106 Display 
+
+#### Pixel Layout
+
+A characteristic of the screen that I found very interesting is the way pixels are organized.
+Since the screen is only monochrome, each pixel can be represented by a single bit, either on or off.
+The screen requires pixel states to be received as bytes, so groups of 8 bits are placed into a byte and sent to the screen.
+Logically each data byte sent to the screen will then map to 8 pixels connected to each other.
+
+I expected these bytes to be mapped to the screen's pixels from left to right, head to tail, followed by the next row.
+But they chose a slightly different way to organize the screen's pixels.
+
+See the following image:
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/8_oled/pages.png)](https://remblog.s3.af-south-1.amazonaws.com/8_oled/pages.png)
+
+
+
+
 
 
 
