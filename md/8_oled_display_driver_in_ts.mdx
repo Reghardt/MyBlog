@@ -43,7 +43,7 @@ I would urge anyone to give it a shot and make up their own mind about it.
 But moving on to the display driver for now.
 
 I have a small SH1106 OLED display that I wanted to try with devicescript, using JSX with it sounded cool.
-But like any other platform, a driver is required to communicate with peripherals such as a screen.
+But like any other platform, a driver is required to communicate with peripherals such as a display.
 One such non existent driver was one for the SH1106.
 So wanting to know more about the I2C protocol and how to write drivers, I decided to give it my best shot.
 
@@ -86,18 +86,127 @@ So why only up to 127 devices on the wire? And how can each device be controlled
 
 #### Pixel Layout
 
-A characteristic of the screen that I found very interesting is the way pixels are organized.
-Since the screen is only monochrome, each pixel can be represented by a single bit, either on or off.
-The screen requires pixel states to be received as bytes, so groups of 8 bits are placed into a byte and sent to the screen.
-Logically each data byte sent to the screen will then map to 8 pixels connected to each other.
+A characteristic of the display that I found very interesting is the way pixels are organized.
+It might be different to what you expect.
 
-I expected these bytes to be mapped to the screen's pixels from left to right, head to tail, followed by the next row.
-But they chose a slightly different way to organize the screen's pixels.
+Since the display is only monochrome, each pixel can be represented by a single bit, either on or off.
+The most logical way to organize these bits are to treat them as bytes.
+So if the display has a resolution of 128 x 64, that is 8192 pixels, or when divided by 8, 1024 bytes.
 
-See the following image:
+The way in which these bytes are organized are shown in the below image:
 
 [![The add in](https://remblog.s3.af-south-1.amazonaws.com/8_oled/pages.png)](https://remblog.s3.af-south-1.amazonaws.com/8_oled/pages.png)
 
+The display is horizontally split into 8 sections called pages, 2 of which are partially\* shown in the image.
+Each page is made up op 128 x 8 pixels, for a total resolution of 128 x 64.
+As each page has a height of 8 pixels, each column in the page can be treated as a byte.
+
+(\*Only an 8x8 section of the zeroth page is shown, in reality the page stretches to the right for an additional 120 bytes)
+
+Tha "Data" Column with labels D0 to D7 represents the bit indexes of each byte in the page.
+
+Each Page has a address as seen in the conveniently named "Page Address" column, with address 0 to 7.
+Page addresses are used to tell the screen into which page to place the incoming data bytes being sent to it.
+
+After a page has been selected, bytes can be sent to the display. 
+After each successive data byte received, the display automatically increments the column address.
+The display does not automatically increment the page address once the end of the a page is reached, 
+although some displays do this as will be discussed later.
+
+#### Writing data to the display
+
+To write data to the display, the I2C protocol is used.  
+But, what is I2C exactly?
+
+Each pin on a micro controller can be used to do something. 
+They can be setup in such a way to control external components outside the micro controller.
+A button for instance, requires one pin, a basic LCD1602 requires about 6 pins.
+
+If each and every external component requires their own exclusive pins, you'll eventually run out of pins on the microcontroller.
+
+Thankfully, back in 1982 some smart guys at Siemens were sitting with this exact predicament, so they came up with I2C to solve their problem.
+
+I2C allows up to 127 devices to communicate using only 2 pins. 
+In other words, there are only 2 wires and each device wanting to communicate connects to these 2 wires using only 2 of their own pins.
+
+So that LCD1602 of earlier? Slap a I2C backplate on it and bring the wires down to 2.
+
+As you can see, I2C is a extremely useful protocol and knowing how it works can prove to be valuable insight.
+
+Below is a visual representation of how a write sequence may look like:
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/8_oled/write.png)](https://remblog.s3.af-south-1.amazonaws.com/8_oled/write.png)
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/8_oled/legends.png)](https://remblog.s3.af-south-1.amazonaws.com/8_oled/legends.png)
+
+The write operation starts with a special start condition 'S', present on the very left of the image.
+What happens during 'S', is that the voltage over the SDA wire goes from high to low while the SCL line stays idle.
+This indicates to all the devices connected to the wires that they should expect a slave address to following, 
+telling which ever device width that address that they have been selected to be communicated with. 
+Imagine a teacher calling out a student's name in a classroom. Everyone hears the students name but only the student responds.
+
+After the slave address has been transmitted the device with that address responds by sending an acknowledge condition, 
+indicating to the master that the device exists and is ready.
+
+The master can then proceed by sending a control byte.
+Below is a control byte:
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/8_oled/control_byte.png)](https://remblog.s3.af-south-1.amazonaws.com/8_oled/control_byte.png)
+
+A control byte consist of 8 bits, with the 2 most significant bits, C0 and DC having special meaning, the rest being padding. 
+The slave sends an acknowledge ('A') after receiving the control byte.
+
+The meaning of C0 and DC are as follows:
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/8_oled/co_dc.png)](https://remblog.s3.af-south-1.amazonaws.com/8_oled/co_dc.png)
+
+So there are 2 types of bytes that can be sent to the display. Control Bytes and Data Bytes.
+Data bytes are further split into 2 types, 
+data bytes interpreted as command operations and data bytes interpreted as RAM operations.
+The way the screen should interpret the data byte(s) depend on the preceding control byte.
+
+Command operations tells the screen what to do, like selecting the page to write to. Clearing the display, inverting its pixels and so on.
+Some other special Commands are sent to the screen during its startup procedure as well.
+
+RAM operations simply tell the display what pixels should be on or off.
+The display has a internal RAM/frame buffer that maps to the pixels of the display. Changing the bytes in RAM updates the display accordingly.
+
+So if C0 is "0", all the bytes following the control byte will be data bytes concluding only when a stop condition is sent.
+The data bytes can then either be interpreted as commands if D/C is "0" or as RAM operations if D/C is "1".
+
+Transmitting a control byte when C0 is "1" may also be useful but I did not use it in my code. 
+Compared to C0 being 0, it simply avoids a stop condition and the retransmission of the slave address when data bytes should be interpreted differently.
+
+For instance, say a page should be selected, after which bytes will be written to RAM.  
+When C0 is '1': (In the first Ctrl Byte only)  
+S -> Addr -> Ctrl -> Page -> Ctrl -> RAM -> RAM -> .... -> RAM -> E  
+
+Compared to when C0 is '0':  
+S -> Addr -> Ctrl -> Page -> E  
+S -> Addr -> Ctrl -> RAM -> RAM -> .... -> RAM -> E
+
+S: Start Condition  
+Addr: Slave Address  
+Ctrl: Control Bytes  
+Page: Page Address  
+RAM: RAM operation  
+E: End Condition  
+(Omitted slave acknowledgements for simplicity)  
+
+In the first case, Commands and Data may be transmitted to the display in a single write (and less operations in total), 
+where in the second the same result can be achieved but over 2 writes (and more operations in total. When factoring in Acknowledgments the length is further increased).
+The reason I chose the second option was that the code is simpler to read, and speed was not an issue at all, 
+surprisingly so since the JS runs in a VM and my result in 10 to 100x slower execution speed than C++.
+
+
+
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/8_oled/slave_address.png)](https://remblog.s3.af-south-1.amazonaws.com/8_oled/slave_address.png)
+
+#### Addressing Mode
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/8_oled/page_addressing.png)](https://remblog.s3.af-south-1.amazonaws.com/8_oled/page_addressing.png)
+
+[![The add in](https://remblog.s3.af-south-1.amazonaws.com/8_oled/vertical_addressing.png)](https://remblog.s3.af-south-1.amazonaws.com/8_oled/vertical_addressing.png)
 
 
 

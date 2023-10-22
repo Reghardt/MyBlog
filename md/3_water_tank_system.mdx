@@ -178,8 +178,79 @@ In retrospect I should have used my Fathers CnC machine but I did not think of t
 
 And finally, here is the control unit with its relay after installation.
 
-### Usage
+### Usage & Demo
+
+What happens in the video?:  
+The water level is currently at 79%. The system is set to stop filling the tank when reaching 80%.
+After selecting the "FILL & AUTO" state the system turns on the pump (the relay can be heard clicking at 0:10), 
+and turns it off when reaching 80%, after which it enters the "AUTO" state. 
+The level briefly falls down to 78% due to erroneous sensor readings as the surface is disturbed by water entering the tank.
+
+<video width="320" height="240" controls>
+  <source src="https://remblog.s3.af-south-1.amazonaws.com/3_water_tank_system/demo.mp4" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+Pressing the left or right arrows loops through a list of "screens" (or pages if you prefer) on the display, each having a different purpose.
+Pressing the up and down arrows changes the state the current screen represents.
+And clicking the round Select button updates the state if it was changed.
 
 
+The "screens" are:  
+1\. Control  
+This screen displays the current water level in the tank as a percentage, it is also used to change the unit's overall state.
+
+The Control screen can be seen at timestamp 0:00 in the video.
+Ctrl is the screen's name.
+P:OFF represents the current pump state, the percentage is the water level and the "OFF" in the second row represent the current system state,
+ie "OFF", "AUTO", "FILL & AUTO" or "FILL & OFF". 
+
+While in the "OFF" state the pump will always be off, or turned off if it was running and the user switches to this state. 
+The system will never turn the pump on in this state, the system can be considered dead, 
+except that it will continue to show new water level readings.
+
+In "AUTO" the system will automatically turn the pump on or off based on the upper and lower water level percentage bounds.
+If the water level falls below the lower bound the pump will be turned on, if the water level reaches or exceeds the upper bound the pump will be turned off.
+This cycle repeats while the system is in this state.
+
+In "FILL & OFF" the system will immediately turn on the pump and fill the tank until the upper percentage bound is reached.
+After which the system will enter the "OFF" state and wont perform any future operations.
+This can be seen as "fill once and don't do anything afterwards".
+
+"FILL & AUTO" will also immediately fill the tank from its current level and then enter the "AUTO" state.
+Useful for if the user wants to top up the tank manually but have the system do it automatically afterwards.
+
+
+Pressing the up and down arrows will switch between these states and pressing Select will put the system in the selected state as can be seen in timestamp 0:10.
+
+2\. Stop Fill When
+This screen sets the upper water bound as a percentage. 
+The maximum value is 100%, and the value cannot be less than the lowest bound + 5%.
+
+
+3\. Refill When
+This screen sets the lower water bound as a percentage. 
+It cannot be less than 0% and more than the upper bound - 5%.
+
+4\. Sensor height Above Water
+This screen sets the sensor height in cm above the maximum water level.
+This is needed for calculating the percentage.
+
+5\. Water Depth
+This screen sets the maximum water depth in cm.
+The sum of the water depth and sensor height cannot exceed 600cm as this is the maximum distance the sensor can take measurements.
+Checks are in place to make sure this does not happen while setting the depth or sensor height. 
 
 ### Problems
+The system has been working flawlessly for about 4 months at tht time of writing this, 
+having filled the tank numerous times.
+The only problem encountered is that water droplets form on the sensor head because of the hight humidity in the tank.
+This causes false sensor readings and makes the system think the tank is 100% full.
+
+Currently my father wipes off any water droplets from the sensor every other day or so.
+We have discussed a few possible solutions and will be trying them in the future.
+
+
+### Github Repo
+Repo for [Control Unit](https://github.com/Reghardt/wt-control-unit)   
+Repo for [Sensor Unit](https://github.com/Reghardt/wt-sensor-unit)
