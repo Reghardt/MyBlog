@@ -1,5 +1,9 @@
 #!/usr/bin/env -S deno run -A --watch=static/,routes/
+
 import dev from "$fresh/dev.ts";
+import config from "./fresh.config.ts";
+import "$std/dotenv/load.ts";
+
 import { evaluate } from "@mdx-js/mdx";
 import * as runtime from "preact/jsx-runtime";
 import { IArticleDetails } from "./Interfaces/IArticleDetails.ts";
@@ -57,20 +61,9 @@ for await (const dirEntry of Deno.readDir("md")) {
 
 articleDetails.sort((a, b) => a.fileName.localeCompare(b.fileName)); //sort articles based on file name
 
-// console.log(JSON.stringify(articleDetails));
-
 await Deno.writeTextFile(
   "./json/articles.json",
   JSON.stringify(articleDetails),
 );
 
-// const proc = new Deno.Command("cmd", {
-//   args: [
-//     "/c",
-//     "npx prettier --write ./routes --plugin=prettier-plugin-tailwindcss",
-//   ],
-// });
-// const output = await proc.output();
-// console.log(new TextDecoder().decode(output.stdout));
-
-await dev(import.meta.url, "./main.ts");
+await dev(import.meta.url, "./main.ts", config);

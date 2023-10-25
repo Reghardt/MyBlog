@@ -8,7 +8,7 @@ export default function App({ Component }: AppProps) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Reghardt's Blog</title>
-        <link rel="stylesheet" href="/styles.css" />
+        {/* <link rel="stylesheet" href="/styles.css" /> */}
         <link href={asset("/css/tailwind.css")} rel="stylesheet" />
 
         <link href={asset("/css/vscdark.css")} rel="stylesheet" />
