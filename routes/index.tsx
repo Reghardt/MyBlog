@@ -48,6 +48,8 @@ export default function Home(
         <div class="grid w-full justify-center">
           <div class="prose w-full p-4">
             <div class={"grid grid-cols-1 gap-4"}>
+              <div class={"text-4xl"}>Reghardt's Blog</div>
+              <div class={""}>{"(under construction...)"}</div>
               {props.data.articles.reverse().map((article) => {
                 if (article.published) {
                   return (

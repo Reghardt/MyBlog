@@ -117,6 +117,12 @@ export default async function MarkdownPage(req: Request, ctx: RouteContext) {
           }
         >
           <div class={"prose prose-slate mx-auto mt-8 lg:prose-lg"}>
+            <div className={"pb-4"}>
+              <a class={"text-blue-700 no-underline"} href={`/`}>
+                {"< "}Articles
+              </a>
+            </div>
+
             {evaluatedArticle.default({})}
           </div>
           <div class={" prose mx-auto mt-8 flex justify-end lg:prose-lg"}>
