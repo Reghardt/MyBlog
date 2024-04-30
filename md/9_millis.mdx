@@ -1,0 +1,108 @@
+
+export const title = "What exactly happens when millis() overflows in Arduino?";
+export const date = "30 April 2024";
+export const peek = "";
+export const published = false;
+
+# {title}
+
+### Intro
+I recently started work on a project involving Raspberry Pi Picos running the arduino framework.
+The Pi Pico's are expected to be powered continuously, during which the Arduino's millis() function may overflow,
+leading to potential disastrous results if handled inappropriately.
+
+What exactly are millis() used for? It is mainly used to execute certain code blocks at set intervals.
+
+Here is an example without millis():
+
+~~~ cpp
+void loop() {
+  digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on
+  delay(1000);                      // wait for a second (1000ms)
+  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off
+  delay(1000);                      // wait for a second (1000ms)
+}
+~~~
+
+In this example a LED is turned on and off forever, at 1 second intervals. This is accomplished with delay().
+But delay has issues. It completely pauses code execution on the arduino for the provided time in ms.
+This is terrible news if the arduino should say, flicker a button and accept user input from a keypad at the same time.
+
+To do both at the same time without pausing all code execution: enter millis().
+How is it used?
+Here is an example with the exact same behavior, but using millis():
+
+~~~ cpp
+const long interval = 1000;
+unsigned long previousMillis = millis();
+
+void loop() {
+  unsigned long currentMillis = millis();
+  
+  if (currentMillis - previousMillis >= interval) {
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    previousMillis = currentMillis;
+  }
+}
+~~~
+
+This example is ever so slightly more complicated so lets run through it. 
+The time interval is set in the first line, ie the LED will switch between being on and off every 1 second.
+"previousMillis" will be set as 0 at the begging of code execution. This is used as a reference point to see if 1 second has passed or not.
+
+In the loop, "currentMillis" is set. This is the current time that is later than "previousMillis".
+In the if statement it is checked to see if the difference between "currentMillis" and "previousMillis" is greater than or equal to the interval.
+If true, the if statement's body gets executed.
+
+Here digitalRead is used to get the current on/off state of the led, which is then inverted with "!", turning the led off if it was on and vice versa.
+After the LED's new state has been set, "previousMillis" gets assigned "currentMillis" and the cycle begins again.
+
+What is important to note here is that there is no pause in code execution. 
+The loop() function runs continuously, checking if the if statement is true, not dissimilar to asking "are we there yet?" all the time on a long trip.
+But having the ability to do anything else between asking, like handling user input.
+
+### The twist
+The part that confused me is that every 50 or so days, millis() resets, restarting at 0ms.
+The explanation is that the maximum value a unsigned long can be on the arduino is 4,294,967,295. 
+Adding 1ms to the maximum value of 4,294,967,295ms results in overflow, the addition result being 0ms.
+
+With that in mind, and swapping variable names for values, this is a possibility:
+~~~ cpp
+//if (currentMillis - previousMillis >= interval)
+  if (100ms - 4294967000ms >= interval) {
+    ....
+  }
+~~~
+
+Here "previousMillis" was set 295ms before overflow, and the code segment captured 100ms after overflow, hence "currentMillis" is 100ms.
+Logic would dictate that the if statement will never be true again, 
+as the subtraction will always be a negative number and thus always be smaller than the interval of 1000ms.
+
+But, both "currentMillis" and "previousMillis" are of type "unsigned long", meaning that they can only store positive numbers.
+Subtraction between two unsigned longs can also only result in a positive number.
+So what happens in this case?  
+100ms - 4294967000ms = 395ms
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
