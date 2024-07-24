@@ -116,15 +116,22 @@ export default async function MarkdownPage(req: Request, ctx: RouteContext) {
             "relative w-full bg-white px-6 py-12 shadow-xl shadow-slate-700/10 ring-1 ring-gray-900/5 md:mx-auto md:max-w-3xl lg:max-w-4xl lg:pb-28 lg:pt-16"
           }
         >
-          <div class={"prose prose-slate mx-auto mt-8 lg:prose-lg"}>
+          <div class={"prose prose-slate mx-auto mt-8  lg:prose-lg"}>
             <div className={"pb-4"}>
               <a class={"text-blue-700 no-underline"} href={`/`}>
                 {"< "}Articles
               </a>
             </div>
-
-            {evaluatedArticle.default({})}
+            <div> The blog has migrated to:</div>
+            <a href="https://rem-blog.fly.dev/">https://rem-blog.fly.dev/</a>
+            <img
+              src="/migration.jpg"
+              alt="Migration"
+              width="500"
+              height="600"
+            ></img>
           </div>
+
           <div class={" prose mx-auto mt-8 flex justify-end lg:prose-lg"}>
             <LikeArticle url_title={url_title} />
           </div>
